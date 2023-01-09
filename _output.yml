@@ -1,0 +1,15 @@
+bookdown::gitbook:
+  df_print: paged
+  css: style.css
+  always_allow_html: yes
+  config:
+    self_contained: yes
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">Анализ данных для лингвистов</a></li>
+    download: ["pdf"]
+    sharing: no
+    edit:
+      link: https://github.com/agricolamz/2022_da4l/edit/master/%s
+      text: "Edit"
