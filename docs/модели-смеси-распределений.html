@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Модели смеси распределений | Анализ данных для лингвистов</title>
+  <meta name="description" content="4 Модели смеси распределений | Анализ данных для лингвистов" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Модели смеси распределений | Анализ данных для лингвистов" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Модели смеси распределений | Анализ данных для лингвистов" />
+  
+  
+  
+
+<meta name="author" content="Г. А. Мороз" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="метод-максимального-правдоподобия.html"/>
+<link rel="next" href="ссылки-на-литературу.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Анализ данных для лингвистов</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> О курсе</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#используемые-пакеты"><i class="fa fa-check"></i><b>1.1</b> Используемые пакеты</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#домашние-задания"><i class="fa fa-check"></i><b>1.2</b> Домашние задания</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="распределения.html"><a href="распределения.html"><i class="fa fa-check"></i><b>2</b> Распределения</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="распределения.html"><a href="распределения.html#распределения-в-r"><i class="fa fa-check"></i><b>2.1</b> Распределения в R</a></li>
+<li class="chapter" data-level="2.2" data-path="распределения.html"><a href="распределения.html#дискретные-переменные"><i class="fa fa-check"></i><b>2.2</b> Дискретные переменные</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="распределения.html"><a href="распределения.html#биномиальное-распределение"><i class="fa fa-check"></i><b>2.2.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="2.2.2" data-path="распределения.html"><a href="распределения.html#геометрическое-распределение"><i class="fa fa-check"></i><b>2.2.2</b> Геометрическое распределение</a></li>
+<li class="chapter" data-level="2.2.3" data-path="распределения.html"><a href="распределения.html#распределение-пуассона"><i class="fa fa-check"></i><b>2.2.3</b> Распределение Пуассона</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="распределения.html"><a href="распределения.html#числовые-переменные"><i class="fa fa-check"></i><b>2.3</b> Числовые переменные</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="распределения.html"><a href="распределения.html#нормальное-распределение"><i class="fa fa-check"></i><b>2.3.1</b> Нормальное распределение</a></li>
+<li class="chapter" data-level="2.3.2" data-path="распределения.html"><a href="распределения.html#логнормальное-распределение"><i class="fa fa-check"></i><b>2.3.2</b> Логнормальное распределение</a></li>
+<li class="chapter" data-level="2.3.3" data-path="распределения.html"><a href="распределения.html#что-еще-почитать-про-распределения"><i class="fa fa-check"></i><b>2.3.3</b> Что еще почитать про распределения?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html"><i class="fa fa-check"></i><b>3</b> Метод максимального правдоподобия</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#оценка-вероятности"><i class="fa fa-check"></i><b>3.1</b> Оценка вероятности</a></li>
+<li class="chapter" data-level="3.2" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#функция-правдоподобия"><i class="fa fa-check"></i><b>3.2</b> Функция правдоподобия</a></li>
+<li class="chapter" data-level="3.3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#пример-с-непрерывным-распределением"><i class="fa fa-check"></i><b>3.3</b> Пример с непрерывным распределением</a></li>
+<li class="chapter" data-level="3.4" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#метод-максимального-правдоподобия-mle"><i class="fa fa-check"></i><b>3.4</b> Метод максимального правдоподобия (MLE)</a></li>
+<li class="chapter" data-level="3.5" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#логорифм-функции-правдоподобия"><i class="fa fa-check"></i><b>3.5</b> Логорифм функции правдоподобия</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html"><i class="fa fa-check"></i><b>4</b> Модели смеси распределений</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#cмеси-распределений"><i class="fa fa-check"></i><b>4.1</b> Cмеси распределений</a></li>
+<li class="chapter" data-level="4.2" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#модели-смеси-распределений-1"><i class="fa fa-check"></i><b>4.2</b> Модели смеси распределений</a></li>
+<li class="chapter" data-level="4.3" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#несколько-замечаний"><i class="fa fa-check"></i><b>4.3</b> Несколько замечаний</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Анализ данных для лингвистов</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="модели-смеси-распределений" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">4</span> Модели смеси распределений<a href="модели-смеси-распределений.html#модели-смеси-распределений" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="cмеси-распределений" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Cмеси распределений<a href="модели-смеси-распределений.html#cмеси-распределений" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Не все переменные выглядят так же красиво, как распределения из учебников статистики. Для примера возьмем датасет, который содержит спамерские и обычные смс-сообщения, выложенный UCI Machine Learning <a href="https://www.kaggle.com/uciml/sms-spam-collection-dataset">на kaggle</a>. Посчитаем количество символов в сообщениях:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="модели-смеси-распределений.html#cb54-1" aria-hidden="true" tabindex="-1"></a>spam_sms <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/spam_sms.csv&quot;</span>)</span>
+<span id="cb54-2"><a href="модели-смеси-распределений.html#cb54-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-3"><a href="модели-смеси-распределений.html#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(spam_sms)</span></code></pre></div>
+<pre><code>Rows: 5,572
+Columns: 2
+$ type    &lt;chr&gt; &quot;ham&quot;, &quot;ham&quot;, &quot;spam&quot;, &quot;ham&quot;, &quot;ham&quot;, &quot;spam&quot;, &quot;ham&quot;, &quot;ham&quot;, &quot;spa…
+$ message &lt;chr&gt; &quot;Go until jurong point, crazy.. Available only in bugis n grea…</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="модели-смеси-распределений.html#cb56-1" aria-hidden="true" tabindex="-1"></a>spam_sms <span class="sc">%&gt;%</span> </span>
+<span id="cb56-2"><a href="модели-смеси-распределений.html#cb56-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_char =</span> <span class="fu">nchar</span>(message)) <span class="ot">-&gt;</span></span>
+<span id="cb56-3"><a href="модели-смеси-распределений.html#cb56-3" aria-hidden="true" tabindex="-1"></a>  spam_sms</span>
+<span id="cb56-4"><a href="модели-смеси-распределений.html#cb56-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb56-5"><a href="модели-смеси-распределений.html#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(spam_sms)</span></code></pre></div>
+<pre><code>Rows: 5,572
+Columns: 3
+$ type    &lt;chr&gt; &quot;ham&quot;, &quot;ham&quot;, &quot;spam&quot;, &quot;ham&quot;, &quot;ham&quot;, &quot;spam&quot;, &quot;ham&quot;, &quot;ham&quot;, &quot;spa…
+$ message &lt;chr&gt; &quot;Go until jurong point, crazy.. Available only in bugis n grea…
+$ n_char  &lt;int&gt; 111, 29, 155, 49, 61, 147, 77, 160, 157, 154, 109, 136, 155, 1…</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="модели-смеси-распределений.html#cb58-1" aria-hidden="true" tabindex="-1"></a>spam_sms <span class="sc">%&gt;%</span> </span>
+<span id="cb58-2"><a href="модели-смеси-распределений.html#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_char))<span class="sc">+</span></span>
+<span id="cb58-3"><a href="модели-смеси-распределений.html#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">&quot;gray90&quot;</span>)<span class="sc">+</span></span>
+<span id="cb58-4"><a href="модели-смеси-распределений.html#cb58-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;данные из kaggle.com/uciml/sms-spam-collection-dataset&quot;</span>,</span>
+<span id="cb58-5"><a href="модели-смеси-распределений.html#cb58-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;количество символов&quot;</span>,</span>
+<span id="cb58-6"><a href="модели-смеси-распределений.html#cb58-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;значение функции плотности&quot;</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<p>Мы видим два явных горба и, как можно догадаться, это связано с тем, что спамерские сообщения в среднем длиннее и сосредоточены вокруг ограничения смс в 160 символов:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="модели-смеси-распределений.html#cb59-1" aria-hidden="true" tabindex="-1"></a>spam_sms <span class="sc">%&gt;%</span> </span>
+<span id="cb59-2"><a href="модели-смеси-распределений.html#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_char))<span class="sc">+</span></span>
+<span id="cb59-3"><a href="модели-смеси-распределений.html#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">&quot;gray70&quot;</span>, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)))<span class="sc">+</span></span>
+<span id="cb59-4"><a href="модели-смеси-распределений.html#cb59-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="fu">aes</span>(<span class="at">fill =</span> type), <span class="at">alpha =</span> <span class="fl">0.3</span>)<span class="sc">+</span></span>
+<span id="cb59-5"><a href="модели-смеси-распределений.html#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;данные из kaggle.com/uciml/sms-spam-collection-dataset&quot;</span>,</span>
+<span id="cb59-6"><a href="модели-смеси-распределений.html#cb59-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;количество символов&quot;</span>,</span>
+<span id="cb59-7"><a href="модели-смеси-распределений.html#cb59-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;значение функции плотности&quot;</span>)<span class="sc">+</span></span>
+<span id="cb59-8"><a href="модели-смеси-распределений.html#cb59-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">160</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="fl">0.3</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+</div>
+<div id="модели-смеси-распределений-1" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Модели смеси распределений<a href="модели-смеси-распределений.html#модели-смеси-распределений-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Такого рода данные можно описать при помощи модели смеси разных распределений. Мы сейчас опишем нормальными распределениями и будем использовать пакет <code>mixtools</code> (для смесей нормальных распределений лучше использовать пакет <code>mclust</code>), но, ясно, что семейство распределений можно было бы подобрать и получше.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="модели-смеси-распределений.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mixtools)</span>
+<span id="cb60-2"><a href="модели-смеси-распределений.html#cb60-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-3"><a href="модели-смеси-распределений.html#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb60-4"><a href="модели-смеси-распределений.html#cb60-4" aria-hidden="true" tabindex="-1"></a>spam_length_est <span class="ot">&lt;-</span> <span class="fu">normalmixEM</span>(spam_sms<span class="sc">$</span>n_char)</span></code></pre></div>
+<pre><code>number of iterations= 73 </code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="модели-смеси-распределений.html#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(spam_length_est)</span></code></pre></div>
+<pre><code>summary of normalmixEM object:
+          comp 1     comp 2
+lambda  0.439334   0.560666
+mu     37.858905 114.070490
+sigma  13.398985  60.921536
+loglik at estimate:  -29421.36 </code></pre>
+<p>Класс, получаемый в результате работы функции <code>normalmixEM()</code> имеет встроеный график:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="модели-смеси-распределений.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(spam_length_est, <span class="at">density =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-57-1.png" width="672" /><img src="da4l_files/figure-html/unnamed-chunk-57-2.png" width="672" /></p>
+<p>Однако, если хочется больше контроля над получаемым разультатом, я бы предложил использовать <code>ggplot()</code>:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="модели-смеси-распределений.html#cb65-1" aria-hidden="true" tabindex="-1"></a>new_dnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, mu, sigma, lambda){</span>
+<span id="cb65-2"><a href="модели-смеси-распределений.html#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(x, mu, sigma)<span class="sc">*</span>lambda</span>
+<span id="cb65-3"><a href="модели-смеси-распределений.html#cb65-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb65-4"><a href="модели-смеси-распределений.html#cb65-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-5"><a href="модели-смеси-распределений.html#cb65-5" aria-hidden="true" tabindex="-1"></a>spam_sms <span class="sc">%&gt;%</span> </span>
+<span id="cb65-6"><a href="модели-смеси-распределений.html#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_char))<span class="sc">+</span></span>
+<span id="cb65-7"><a href="модели-смеси-распределений.html#cb65-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;gray90&quot;</span>)<span class="sc">+</span></span>
+<span id="cb65-8"><a href="модели-смеси-распределений.html#cb65-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> new_dnorm, </span>
+<span id="cb65-9"><a href="модели-смеси-распределений.html#cb65-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">c</span>(<span class="at">mu =</span> spam_length_est<span class="sc">$</span>mu[<span class="dv">1</span>],</span>
+<span id="cb65-10"><a href="модели-смеси-распределений.html#cb65-10" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">sigma =</span> spam_length_est<span class="sc">$</span>sigma[<span class="dv">1</span>],</span>
+<span id="cb65-11"><a href="модели-смеси-распределений.html#cb65-11" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">lambda =</span> spam_length_est<span class="sc">$</span>lambda[<span class="dv">1</span>]),</span>
+<span id="cb65-12"><a href="модели-смеси-распределений.html#cb65-12" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;#F8766D&quot;</span>)<span class="sc">+</span></span>
+<span id="cb65-13"><a href="модели-смеси-распределений.html#cb65-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> new_dnorm, </span>
+<span id="cb65-14"><a href="модели-смеси-распределений.html#cb65-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">args =</span> <span class="fu">c</span>(<span class="at">mu =</span> spam_length_est<span class="sc">$</span>mu[<span class="dv">2</span>],</span>
+<span id="cb65-15"><a href="модели-смеси-распределений.html#cb65-15" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">sigma =</span> spam_length_est<span class="sc">$</span>sigma[<span class="dv">2</span>],</span>
+<span id="cb65-16"><a href="модели-смеси-распределений.html#cb65-16" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">lambda =</span> spam_length_est<span class="sc">$</span>lambda[<span class="dv">2</span>]),</span>
+<span id="cb65-17"><a href="модели-смеси-распределений.html#cb65-17" aria-hidden="true" tabindex="-1"></a>                <span class="at">color =</span> <span class="st">&quot;#00BFC4&quot;</span>)<span class="sc">+</span></span>
+<span id="cb65-18"><a href="модели-смеси-распределений.html#cb65-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;данные из kaggle.com/uciml/sms-spam-collection-dataset&quot;</span>,</span>
+<span id="cb65-19"><a href="модели-смеси-распределений.html#cb65-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;количество символов&quot;</span>,</span>
+<span id="cb65-20"><a href="модели-смеси-распределений.html#cb65-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;значение функции плотности&quot;</span>)<span class="sc">+</span></span>
+<span id="cb65-21"><a href="модели-смеси-распределений.html#cb65-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">160</span>, <span class="at">linetype =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="fl">0.3</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<p>Таким образом мы получили классификатор</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="модели-смеси-распределений.html#cb66-1" aria-hidden="true" tabindex="-1"></a>first <span class="ot">&lt;-</span> <span class="fu">new_dnorm</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">750</span>, <span class="at">by =</span> <span class="dv">1</span>), </span>
+<span id="cb66-2"><a href="модели-смеси-распределений.html#cb66-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mu =</span> spam_length_est<span class="sc">$</span>mu[<span class="dv">1</span>],</span>
+<span id="cb66-3"><a href="модели-смеси-распределений.html#cb66-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sigma =</span> spam_length_est<span class="sc">$</span>sigma[<span class="dv">1</span>],</span>
+<span id="cb66-4"><a href="модели-смеси-распределений.html#cb66-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">lambda =</span> spam_length_est<span class="sc">$</span>lambda[<span class="dv">1</span>])</span>
+<span id="cb66-5"><a href="модели-смеси-распределений.html#cb66-5" aria-hidden="true" tabindex="-1"></a>second <span class="ot">&lt;-</span> <span class="fu">new_dnorm</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">750</span>, <span class="at">by =</span> <span class="dv">1</span>), </span>
+<span id="cb66-6"><a href="модели-смеси-распределений.html#cb66-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">mu =</span> spam_length_est<span class="sc">$</span>mu[<span class="dv">2</span>],</span>
+<span id="cb66-7"><a href="модели-смеси-распределений.html#cb66-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sigma =</span> spam_length_est<span class="sc">$</span>sigma[<span class="dv">2</span>],</span>
+<span id="cb66-8"><a href="модели-смеси-распределений.html#cb66-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">lambda =</span> spam_length_est<span class="sc">$</span>lambda[<span class="dv">2</span>])</span>
+<span id="cb66-9"><a href="модели-смеси-распределений.html#cb66-9" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(first <span class="sc">&gt;</span> second)</span></code></pre></div>
+<pre><code> [1]  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
+[26] 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55
+[51] 56 57 58 59 60 61 62</code></pre>
+<p>Если в смс-сообщении больше 62 символов, то согласно нашей модели, вероятнее всего это спам.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="модели-смеси-распределений.html#cb68-1" aria-hidden="true" tabindex="-1"></a>spam_sms <span class="sc">%&gt;%</span> </span>
+<span id="cb68-2"><a href="модели-смеси-распределений.html#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">model_predict =</span> <span class="fu">ifelse</span>(n_char <span class="sc">&gt;</span> <span class="dv">63</span>, <span class="st">&quot;predicted_spam&quot;</span>, <span class="st">&quot;predicted_ham&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb68-3"><a href="модели-смеси-распределений.html#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(model_predict, type) <span class="sc">%&gt;%</span> </span>
+<span id="cb68-4"><a href="модели-смеси-распределений.html#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> type, <span class="at">values_from =</span> n)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["model_predict"],"name":[1],"type":["chr"],"align":["left"]},{"label":["ham"],"name":[2],"type":["int"],"align":["right"]},{"label":["spam"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"predicted_ham","2":"2834","3":"25"},{"1":"predicted_spam","2":"1991","3":"722"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Результат не идеальный, но лучше чем помечать как спам каждое 13 сообщение (<span class="math inline">\(747/(4825+747)\)</span>).</p>
+<div class="rmdtask">
+<p>
+В работе <span class="citation"><span class="citation">(<a href="#ref-coretta2016" role="doc-biblioref">Coretta 2016</a>)</span></span> собраны <a
+href="https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv">данные</a>
+длительности исландских гласных. Отфильтруйте данные, оставив наблюдения
+гласного [a] (переменная <code>vowel</code>), произнесенные носителем
+<code>tt01</code> (переменная <code>speaker</code>) и постройте
+следующие графики, моделируя длительность гласного (переменная
+<code>vowel.dur</code>) смесью трех нормальных распределений. Как вам
+кажется, насколько хорошо модель смеси справилась с заданием?
+</p>
+</div>
+<pre><code>number of iterations= 114 </code></pre>
+<p><img src="da4l_files/figure-html/unnamed-chunk-62-1.png" width="672" /><img src="da4l_files/figure-html/unnamed-chunk-62-2.png" width="672" /></p>
+</div>
+<div id="несколько-замечаний" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Несколько замечаний<a href="модели-смеси-распределений.html#несколько-замечаний" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>В наших примерах нам была доступна информация о классах (spam/ham, coronal/labial/velar), однако модель смесей распределений как раз имеет смысл применять, когда такой информации нет.</li>
+<li>В смеси распределений может быть любое количество распределений.</li>
+<li>Модели смеси распределений не ограничены только нормальным распределением, алгоритм можно использовать и для других распределений.</li>
+<li>Чаще всего в моделях смеси распределений используются распределения одного семейства, однако можно себе представить и комбинации посложнее.</li>
+<li>Модели смеси распределений (mixture models) не стоит путать со смешанными моделями (mixed effects models).</li>
+</ul>
+
+</div>
+</div>
+<h3>Ссылки на литературу<a href="ссылки-на-литературу.html#ссылки-на-литературу" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-coretta2016" class="csl-entry">
+Coretta, Stefano. 2016. <span>“Vowel Duration and Aspiration Effects in Icelandic.”</span> University of York.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="метод-максимального-правдоподобия.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ссылки-на-литературу.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/agricolamz/2022_da4l/edit/master/03-mixture-models.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["da4l.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"self_contained": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
