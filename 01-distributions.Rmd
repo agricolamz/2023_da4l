@@ -288,7 +288,7 @@ vowels %>%
 vowels <- read_csv("https://raw.githubusercontent.com/agricolamz/2021_da4l/master/data/phonTools_hillenbrand_1995.csv") 
 vowels %>% 
   ggplot(aes(dur)) + 
-  geom_histogram(aes(y =..density..)) + # обратите внимание на аргумент ..density..
+  geom_histogram(aes(y = after_stat(density))) + # обратите внимание на аргумент after_stat(density)
   stat_function(fun = dnorm, args = list(mean = 274.673, sd = 64.482), color = "red")
 ```
 
@@ -322,11 +322,11 @@ vowels %>%
 ```{r, echo = FALSE}
 vowels %>% 
   ggplot(aes(dur)) + 
-  geom_histogram(aes(y =..density..), fill = "grey90") + 
+  geom_histogram(aes(y =after_stat(density)), fill = "grey90") + 
   stat_function(fun = dlnorm, args = list(mean = 5.587, sd = 0.242), color = "red")+
   stat_function(fun = dlnorm, args = list(mean = 5.687, sd = 0.342), color = "darkgreen")+
   stat_function(fun = dlnorm, args = list(mean = 5.487, sd = 0.262), color = "navy")+
-  labs(subtitle = "синяя: ln μ = 5.487, ln σ = 0.262\nкрасная: ln μ = 5.687, ln σ = 0.342\nзеленая: ln μ = 5.487, ln σ = 0.262\n",
+  labs(subtitle = "синяя: ln μ = 5.487, ln σ = 0.262\nкрасная: ln μ = 5.687, ln σ = 0.342\nзеленая: ln μ = 5.587, ln σ = 0.242\n",
        x = "длительность гласного (мс)",
        y = "значение функции плотности")
 ```
