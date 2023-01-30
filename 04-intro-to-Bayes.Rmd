@@ -359,7 +359,7 @@ mean_post <- weighted.mean(c(mean_prior, mean_data), c(1/sd_prior^2, 1/sd_data^2
 
 chicks %>% 
   ggplot(aes(weight)) +
-  geom_histogram(aes(y = ..density..))+
+  geom_histogram(aes(y = after_stat(density)))+
   stat_function(fun = dnorm, args = list(mean_prior,  sd_prior), color = "lightblue")+
   stat_function(fun = dnorm, args = list(mean_post,  sd_post), color = "red")
 ```
@@ -386,7 +386,7 @@ mean_post <- weighted.mean(c(mean_prior, mean_data), c(1/sd_prior^2, 1/sd_data^2
 
 vowels %>% 
   ggplot(aes(vowel.dur)) +
-  geom_histogram(aes(y = ..density..))+
+  geom_histogram(aes(y = after_stat(density)))+
   stat_function(fun = dnorm, args = list(mean_prior,  sd_prior), color = "lightblue")+
   stat_function(fun = dnorm, args = list(mean_post,  sd_post), color = "red")
 ```
