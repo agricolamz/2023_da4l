@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Введение в Марковские цепи Монте-Карло | Анализ данных для лингвистов</title>
+  <meta name="description" content="9 Введение в Марковские цепи Монте-Карло | Анализ данных для лингвистов" />
+  <meta name="generator" content="bookdown 0.31 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Введение в Марковские цепи Монте-Карло | Анализ данных для лингвистов" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Введение в Марковские цепи Монте-Карло | Анализ данных для лингвистов" />
+  
+  
+  
+
+<meta name="author" content="Г. А. Мороз" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="эмпирическая-байесовская-оценка.html"/>
+<link rel="next" href="ссылки-на-литературу.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="libs/viz-1.8.2/viz.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/grViz-binding-1.0.9/grViz.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Анализ данных для лингвистов</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> О курсе</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#используемые-пакеты"><i class="fa fa-check"></i><b>1.1</b> Используемые пакеты</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#домашние-задания"><i class="fa fa-check"></i><b>1.2</b> Домашние задания</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="распределения.html"><a href="распределения.html"><i class="fa fa-check"></i><b>2</b> Распределения</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="распределения.html"><a href="распределения.html#распределения-в-r"><i class="fa fa-check"></i><b>2.1</b> Распределения в R</a></li>
+<li class="chapter" data-level="2.2" data-path="распределения.html"><a href="распределения.html#дискретные-переменные"><i class="fa fa-check"></i><b>2.2</b> Дискретные переменные</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="распределения.html"><a href="распределения.html#биномиальное-распределение"><i class="fa fa-check"></i><b>2.2.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="2.2.2" data-path="распределения.html"><a href="распределения.html#геометрическое-распределение"><i class="fa fa-check"></i><b>2.2.2</b> Геометрическое распределение</a></li>
+<li class="chapter" data-level="2.2.3" data-path="распределения.html"><a href="распределения.html#распределение-пуассона"><i class="fa fa-check"></i><b>2.2.3</b> Распределение Пуассона</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="распределения.html"><a href="распределения.html#числовые-переменные"><i class="fa fa-check"></i><b>2.3</b> Числовые переменные</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="распределения.html"><a href="распределения.html#нормальное-распределение"><i class="fa fa-check"></i><b>2.3.1</b> Нормальное распределение</a></li>
+<li class="chapter" data-level="2.3.2" data-path="распределения.html"><a href="распределения.html#логнормальное-распределение"><i class="fa fa-check"></i><b>2.3.2</b> Логнормальное распределение</a></li>
+<li class="chapter" data-level="2.3.3" data-path="распределения.html"><a href="распределения.html#что-еще-почитать-про-распределения"><i class="fa fa-check"></i><b>2.3.3</b> Что еще почитать про распределения?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html"><i class="fa fa-check"></i><b>3</b> Метод максимального правдоподобия</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#оценка-вероятности"><i class="fa fa-check"></i><b>3.1</b> Оценка вероятности</a></li>
+<li class="chapter" data-level="3.2" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#функция-правдоподобия"><i class="fa fa-check"></i><b>3.2</b> Функция правдоподобия</a></li>
+<li class="chapter" data-level="3.3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#пример-с-непрерывным-распределением"><i class="fa fa-check"></i><b>3.3</b> Пример с непрерывным распределением</a></li>
+<li class="chapter" data-level="3.4" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#метод-максимального-правдоподобия-mle"><i class="fa fa-check"></i><b>3.4</b> Метод максимального правдоподобия (MLE)</a></li>
+<li class="chapter" data-level="3.5" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#логорифм-функции-правдоподобия"><i class="fa fa-check"></i><b>3.5</b> Логорифм функции правдоподобия</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html"><i class="fa fa-check"></i><b>4</b> Модели смеси распределений</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#cмеси-распределений"><i class="fa fa-check"></i><b>4.1</b> Cмеси распределений</a></li>
+<li class="chapter" data-level="4.2" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#модели-смеси-распределений-1"><i class="fa fa-check"></i><b>4.2</b> Модели смеси распределений</a></li>
+<li class="chapter" data-level="4.3" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#несколько-замечаний"><i class="fa fa-check"></i><b>4.3</b> Несколько замечаний</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html"><i class="fa fa-check"></i><b>5</b> Байесовский статистический вывод</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#нотация"><i class="fa fa-check"></i><b>5.1</b> Нотация</a></li>
+<li class="chapter" data-level="5.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#категориальный-пример"><i class="fa fa-check"></i><b>5.2</b> Категориальный пример</a></li>
+<li class="chapter" data-level="5.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#разница-между-фриквентиским-и-байесовским-подходами"><i class="fa fa-check"></i><b>5.3</b> Разница между фриквентиским и байесовским подходами</a></li>
+<li class="chapter" data-level="5.4" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#биномиальные-данные"><i class="fa fa-check"></i><b>5.4</b> Биномиальные данные</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#биномиальное-распределение-1"><i class="fa fa-check"></i><b>5.4.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="5.4.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#бета-распределение"><i class="fa fa-check"></i><b>5.4.2</b> Бета распределение</a></li>
+<li class="chapter" data-level="5.4.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-биномиальных-данных"><i class="fa fa-check"></i><b>5.4.3</b> Байесовский апдейт биномиальных данных</a></li>
+<li class="chapter" data-level="5.4.4" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-биномиальных-данных-несколько-моделей"><i class="fa fa-check"></i><b>5.4.4</b> Байесовский апдейт биномиальных данных: несколько моделей</a></li>
+<li class="chapter" data-level="5.4.5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#что-почитать"><i class="fa fa-check"></i><b>5.4.5</b> Что почитать?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения"><i class="fa fa-check"></i><b>5.5</b> Байесовский апдейт нормального распределения</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения-выбор-из-нескольких-моделей"><i class="fa fa-check"></i><b>5.5.1</b> Байесовский апдейт нормального распределения: выбор из нескольких моделей</a></li>
+<li class="chapter" data-level="5.5.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения-непрерывный-вариант"><i class="fa fa-check"></i><b>5.5.2</b> Байесовский апдейт нормального распределения: непрерывный вариант</a></li>
+<li class="chapter" data-level="5.5.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#что-почитать-1"><i class="fa fa-check"></i><b>5.5.3</b> Что почитать?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#другие-распределения"><i class="fa fa-check"></i><b>5.6</b> Другие распределения</a></li>
+<li class="chapter" data-level="5.7" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#вопросы-к-апостериорному-распределению"><i class="fa fa-check"></i><b>5.7</b> Вопросы к апостериорному распределению</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html"><i class="fa fa-check"></i><b>6</b> Байесовский доверительный интервал</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html#фреквентисткий-доверительный-интервал"><i class="fa fa-check"></i><b>6.1</b> Фреквентисткий доверительный интервал</a></li>
+<li class="chapter" data-level="6.2" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html#байесовский-доверительный-интервал-1"><i class="fa fa-check"></i><b>6.2</b> Байесовский доверительный интервал</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html"><i class="fa fa-check"></i><b>7</b> Коэффициент Байеса</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#формула-байеса-опять"><i class="fa fa-check"></i><b>7.1</b> Формула Байеса опять</a></li>
+<li class="chapter" data-level="7.2" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#категориальные-данные"><i class="fa fa-check"></i><b>7.2</b> Категориальные данные</a></li>
+<li class="chapter" data-level="7.3" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#интерпретация-коэфициента-байеса"><i class="fa fa-check"></i><b>7.3</b> Интерпретация коэфициента Байеса</a></li>
+<li class="chapter" data-level="7.4" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#биномиальные-данные-1"><i class="fa fa-check"></i><b>7.4</b> Биномиальные данные</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="эмпирическая-байесовская-оценка.html"><a href="эмпирическая-байесовская-оценка.html"><i class="fa fa-check"></i><b>8</b> Эмпирическая байесовская оценка</a></li>
+<li class="chapter" data-level="9" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html"><i class="fa fa-check"></i><b>9</b> Введение в Марковские цепи Монте-Карло</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#марковские-цепи"><i class="fa fa-check"></i><b>9.1</b> Марковские цепи</a></li>
+<li class="chapter" data-level="9.2" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#хакерская-статистика-основано-на-статистика-для-хакеров-джейка-вандерпласа"><i class="fa fa-check"></i><b>9.2</b> Хакерская статистика (основано на “Статистика для хакеров” Джейка Вандерпласа)</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#биномиальные-данные-2"><i class="fa fa-check"></i><b>9.2.1</b> Биномиальные данные</a></li>
+<li class="chapter" data-level="9.2.2" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#метод-монте-карло"><i class="fa fa-check"></i><b>9.2.2</b> Метод Монте-Карло</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#соединение-идей-марковских-цепей-и-монте-карло"><i class="fa fa-check"></i><b>9.3</b> Соединение идей Марковских цепей и Монте-Карло</a></li>
+<li class="chapter" data-level="9.4" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#brms"><i class="fa fa-check"></i><b>9.4</b> <code>brms</code></a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#регрессионный-пример"><i class="fa fa-check"></i><b>9.4.1</b> Регрессионный пример</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Анализ данных для лингвистов</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="введение-в-марковские-цепи-монте-карло" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">9</span> Введение в Марковские цепи Монте-Карло<a href="введение-в-марковские-цепи-монте-карло.html#введение-в-марковские-цепи-монте-карло" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<p>Марковская цепь Монте-Карло (Markov chain Monte Carlo, MCMC) — это класс алгоритмов для семплирования, которые позволяют моделировать некоторое распределение вероятностей. При моделировании используют разные алгоритмы, мы будем смотреть на примере алгоритма Метрополиса-Гастингса (Metropolis-Hastings).</p>
+<p>Для того, чтобы в этом разобраться нам потребуется обсудить:</p>
+<ul>
+<li>метод Монте-Карло;</li>
+<li>марковские цепи;</li>
+<li>алгоритма Метрополиса-Гастингса.</li>
+</ul>
+<div id="марковские-цепи" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Марковские цепи<a href="введение-в-марковские-цепи-монте-карло.html#марковские-цепи" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Марковский процесс</p>
+<ul>
+<li>конечное количество состояний</li>
+<li>вероятность переходов из одного состояния в другое</li>
+</ul>
+<p>Возьмем наш датасет с sms и посмотрим частоты разных частей речи::</p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<p>Теперь давайте посмотрим на частотность переходов из одних состояний в другие:</p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-128-1.png" width="1152" /></p>
+<p>Иногда это визуализируют при помощи графов, но в нашем случае (это граф ham) это достаточно бесполезно (наводите на вершины стрелочки, чтобы что-то разглядеть):</p>
+<div class="grViz html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-6718eabbbec8ff7ecd63" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-6718eabbbec8ff7ecd63">{"x":{"diagram":"digraph {\n\ngraph [layout = \"neato\",\n       outputorder = \"edgesfirst\",\n       bgcolor = \"white\"]\n\nnode [fontname = \"Helvetica\",\n      fontsize = \"10\",\n      shape = \"circle\",\n      fixedsize = \"true\",\n      width = \"0.5\",\n      style = \"filled\",\n      fillcolor = \"aliceblue\",\n      color = \"gray70\",\n      fontcolor = \"gray50\"]\n\nedge [fontname = \"Helvetica\",\n     fontsize = \"8\",\n     len = \"1.5\",\n     color = \"gray80\",\n     arrowsize = \"0.5\"]\n\n  \"1\" [label = \"ADJ\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"2\" [label = \"ADP\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"3\" [label = \"ADV\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"4\" [label = \"AUX\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"5\" [label = \"CCONJ\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"6\" [label = \"DET\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"7\" [label = \"INTJ\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"8\" [label = \"NOUN\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"9\" [label = \"NUM\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"10\" [label = \"PART\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"11\" [label = \"PRON\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"12\" [label = \"PROPN\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"13\" [label = \"PUNCT\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"14\" [label = \"SCONJ\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"15\" [label = \"SYM\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"16\" [label = \"VERB\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n  \"17\" [label = \"X\", width = \"0.2\", fontsize = \"4\", penwidth = \"0.1\", fillcolor = \"#F0F8FF\", fontcolor = \"#000000\"] \n\"1\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝ADJ 0.16\"] \n\"1\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝ADP 0.28\"] \n\"1\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝ADV 0.14\"] \n\"1\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝AUX 0.05\"] \n\"1\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝CCONJ 0.22\"] \n\"1\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝DET 0.03\"] \n\"1\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝INTJ 0.01\"] \n\"1\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝NOUN 2.7\"] \n\"1\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝NUM 0.04\"] \n\"1\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝PART 0.15\"] \n\"1\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝PRON 0.19\"] \n\"1\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝PROPN 0.06\"] \n\"1\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝PUNCT 1.07\"] \n\"1\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝SCONJ 0.08\"] \n\"1\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝SYM 0.04\"] \n\"1\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝VERB 0.08\"] \n\"1\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADJ➝X 0.02\"] \n\"2\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝ADJ 0.32\"] \n\"2\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝ADP 0.32\"] \n\"2\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝ADV 0.15\"] \n\"2\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝AUX 0\"] \n\"2\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝CCONJ 0.14\"] \n\"2\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝DET 1.23\"] \n\"2\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝INTJ 0.01\"] \n\"2\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝NOUN 1.64\"] \n\"2\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝NUM 0.27\"] \n\"2\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝PART 0.01\"] \n\"2\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝PRON 1.34\"] \n\"2\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝PROPN 0.33\"] \n\"2\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝PUNCT 0.17\"] \n\"2\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝SCONJ 0.02\"] \n\"2\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝SYM 0.02\"] \n\"2\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝VERB 0.02\"] \n\"2\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADP➝X 0.03\"] \n\"3\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝ADJ 0.64\"] \n\"3\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝ADP 0.45\"] \n\"3\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝ADV 0.92\"] \n\"3\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝AUX 0.5\"] \n\"3\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝CCONJ 0.19\"] \n\"3\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝DET 0.17\"] \n\"3\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝INTJ 0.03\"] \n\"3\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝NOUN 0.15\"] \n\"3\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝NUM 0.12\"] \n\"3\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝PART 0.14\"] \n\"3\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝PRON 0.9\"] \n\"3\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝PROPN 0.04\"] \n\"3\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝PUNCT 1.42\"] \n\"3\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝SCONJ 0.13\"] \n\"3\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝SYM 0.09\"] \n\"3\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝VERB 1.15\"] \n\"3\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"ADV➝X 0.03\"] \n\"4\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝ADJ 0.73\"] \n\"4\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝ADP 0.33\"] \n\"4\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝ADV 0.73\"] \n\"4\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝AUX 0.31\"] \n\"4\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝CCONJ 0.03\"] \n\"4\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝DET 0.31\"] \n\"4\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝INTJ 0\"] \n\"4\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝NOUN 0.12\"] \n\"4\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝NUM 0.04\"] \n\"4\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝PART 0.99\"] \n\"4\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝PRON 1.09\"] \n\"4\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝PROPN 0.06\"] \n\"4\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝PUNCT 0.07\"] \n\"4\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝SCONJ 0.01\"] \n\"4\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝SYM 0.04\"] \n\"4\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝VERB 2.33\"] \n\"4\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"AUX➝X 0.02\"] \n\"5\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝ADJ 0.18\"] \n\"5\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝ADP 0.03\"] \n\"5\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝ADV 0.2\"] \n\"5\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝AUX 0.14\"] \n\"5\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝CCONJ 0.01\"] \n\"5\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝DET 0.11\"] \n\"5\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝INTJ 0.01\"] \n\"5\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝NOUN 0.77\"] \n\"5\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝NUM 0.03\"] \n\"5\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝PART 0.02\"] \n\"5\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝PRON 0.63\"] \n\"5\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝PROPN 0.05\"] \n\"5\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝PUNCT 0.02\"] \n\"5\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝SCONJ 0.05\"] \n\"5\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝SYM 0.01\"] \n\"5\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝VERB 0.45\"] \n\"5\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"CCONJ➝X 0.02\"] \n\"6\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝ADJ 0.87\"] \n\"6\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝ADP 0.04\"] \n\"6\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝ADV 0.05\"] \n\"6\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝AUX 0.02\"] \n\"6\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝CCONJ 0.02\"] \n\"6\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝DET 0.07\"] \n\"6\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝INTJ 0\"] \n\"6\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝NOUN 3.08\"] \n\"6\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝NUM 0.07\"] \n\"6\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝PART 0.01\"] \n\"6\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝PRON 0.06\"] \n\"6\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝PROPN 0.06\"] \n\"6\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝PUNCT 0.04\"] \n\"6\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝SCONJ 0\"] \n\"6\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝SYM 0.01\"] \n\"6\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝VERB 0.07\"] \n\"6\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"DET➝X 0\"] \n\"7\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝ADJ 0.03\"] \n\"7\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝ADP 0.01\"] \n\"7\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝ADV 0.09\"] \n\"7\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝AUX 0.05\"] \n\"7\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝CCONJ 0.04\"] \n\"7\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝DET 0.04\"] \n\"7\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝INTJ 0.2\"] \n\"7\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝NOUN 0.03\"] \n\"7\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝NUM 0.01\"] \n\"7\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝PART 0\"] \n\"7\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝PRON 0.31\"] \n\"7\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝PROPN 0.03\"] \n\"7\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝PUNCT 0.91\"] \n\"7\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝SCONJ 0.01\"] \n\"7\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝SYM 0.02\"] \n\"7\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝VERB 0.27\"] \n\"7\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"INTJ➝X 0.01\"] \n\"8\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝ADJ 0.23\"] \n\"8\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝ADP 1.71\"] \n\"8\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝ADV 0.97\"] \n\"8\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝AUX 0.82\"] \n\"8\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝CCONJ 0.9\"] \n\"8\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝DET 0.11\"] \n\"8\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝INTJ 0.04\"] \n\"8\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝NOUN 2.29\"] \n\"8\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝NUM 0.21\"] \n\"8\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝PART 0.35\"] \n\"8\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝PRON 0.71\"] \n\"8\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝PROPN 0.06\"] \n\"8\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝PUNCT 5.93\"] \n\"8\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝SCONJ 0.24\"] \n\"8\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝SYM 0.2\"] \n\"8\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝VERB 0.9\"] \n\"8\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NOUN➝X 0.04\"] \n\"9\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝ADJ 0.06\"] \n\"9\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝ADP 0.06\"] \n\"9\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝ADV 0.03\"] \n\"9\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝AUX 0.02\"] \n\"9\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝CCONJ 0.03\"] \n\"9\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝DET 0.03\"] \n\"9\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝INTJ 0\"] \n\"9\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝NOUN 0.67\"] \n\"9\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝NUM 0.03\"] \n\"9\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝PART 0.02\"] \n\"9\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝PRON 0.09\"] \n\"9\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝PROPN 0.06\"] \n\"9\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝PUNCT 0.22\"] \n\"9\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝SCONJ 0.01\"] \n\"9\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝SYM 0.03\"] \n\"9\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝VERB 0.04\"] \n\"9\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"NUM➝X 0.01\"] \n\"10\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝ADJ 0.11\"] \n\"10\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝ADP 0.03\"] \n\"10\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝ADV 0.13\"] \n\"10\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝AUX 0.15\"] \n\"10\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝CCONJ 0.01\"] \n\"10\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝DET 0.04\"] \n\"10\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝INTJ 0.01\"] \n\"10\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝NOUN 0.14\"] \n\"10\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝NUM 0.01\"] \n\"10\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝PART 0\"] \n\"10\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝PRON 0.06\"] \n\"10\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝PROPN 0.01\"] \n\"10\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝PUNCT 0.06\"] \n\"10\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝SCONJ 0.01\"] \n\"10\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝SYM 0\"] \n\"10\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝VERB 2.28\"] \n\"10\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PART➝X 0.01\"] \n\"11\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝ADJ 0.51\"] \n\"11\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝ADP 0.55\"] \n\"11\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝ADV 0.85\"] \n\"11\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝AUX 3.91\"] \n\"11\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝CCONJ 0.15\"] \n\"11\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝DET 0.29\"] \n\"11\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝INTJ 0.04\"] \n\"11\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝NOUN 1.98\"] \n\"11\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝NUM 0.06\"] \n\"11\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝PART 0.2\"] \n\"11\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝PRON 0.31\"] \n\"11\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝PROPN 0.07\"] \n\"11\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝PUNCT 1.17\"] \n\"11\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝SCONJ 0.07\"] \n\"11\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝SYM 0.03\"] \n\"11\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝VERB 4.13\"] \n\"11\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PRON➝X 0.03\"] \n\"12\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝ADJ 0.04\"] \n\"12\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝ADP 0.11\"] \n\"12\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝ADV 0.09\"] \n\"12\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝AUX 0.15\"] \n\"12\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝CCONJ 0.1\"] \n\"12\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝DET 0.02\"] \n\"12\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝INTJ 0.02\"] \n\"12\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝NOUN 0.17\"] \n\"12\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝NUM 0.07\"] \n\"12\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝PART 0.09\"] \n\"12\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝PRON 0.13\"] \n\"12\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝PROPN 1.16\"] \n\"12\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝PUNCT 0.8\"] \n\"12\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝SCONJ 0.02\"] \n\"12\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝SYM 0.06\"] \n\"12\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝VERB 0.23\"] \n\"12\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PROPN➝X 0.01\"] \n\"13\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝ADJ 0.5\"] \n\"13\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝ADP 0.21\"] \n\"13\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝ADV 0.84\"] \n\"13\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝AUX 0.63\"] \n\"13\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝CCONJ 0.47\"] \n\"13\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝DET 0.32\"] \n\"13\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝INTJ 0.41\"] \n\"13\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝NOUN 1.22\"] \n\"13\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝NUM 0.07\"] \n\"13\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝PART 0.07\"] \n\"13\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝PRON 2.58\"] \n\"13\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝PROPN 0.65\"] \n\"13\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝PUNCT 1.12\"] \n\"13\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝SCONJ 0.23\"] \n\"13\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝SYM 0.18\"] \n\"13\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝VERB 1.11\"] \n\"13\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"PUNCT➝X 0.08\"] \n\"14\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝ADJ 0.02\"] \n\"14\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝ADP 0.01\"] \n\"14\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝ADV 0.06\"] \n\"14\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝AUX 0.02\"] \n\"14\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝CCONJ 0.01\"] \n\"14\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝DET 0.04\"] \n\"14\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝NOUN 0.06\"] \n\"14\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝NUM 0.01\"] \n\"14\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝PART 0.02\"] \n\"14\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝PRON 0.84\"] \n\"14\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝PROPN 0.03\"] \n\"14\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝PUNCT 0\"] \n\"14\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝SCONJ 0.03\"] \n\"14\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝SYM 0.01\"] \n\"14\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝VERB 0.2\"] \n\"14\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SCONJ➝X 0.01\"] \n\"15\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝ADJ 0.04\"] \n\"15\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝ADP 0.02\"] \n\"15\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝ADV 0.06\"] \n\"15\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝AUX 0.02\"] \n\"15\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝CCONJ 0.03\"] \n\"15\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝DET 0.02\"] \n\"15\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝INTJ 0\"] \n\"15\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝NOUN 0.06\"] \n\"15\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝NUM 0.03\"] \n\"15\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝PART 0.01\"] \n\"15\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝PRON 0.06\"] \n\"15\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝PROPN 0.02\"] \n\"15\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝PUNCT 0.05\"] \n\"15\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝SCONJ 0.01\"] \n\"15\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝SYM 0.04\"] \n\"15\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝VERB 0.11\"] \n\"15\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"SYM➝X 0\"] \n\"16\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝ADJ 0.54\"] \n\"16\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝ADP 1.76\"] \n\"16\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝ADV 1.42\"] \n\"16\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝AUX 0.07\"] \n\"16\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝CCONJ 0.28\"] \n\"16\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝DET 1.42\"] \n\"16\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝INTJ 0.06\"] \n\"16\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝NOUN 1.29\"] \n\"16\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝NUM 0.31\"] \n\"16\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝PART 0.94\"] \n\"16\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝PRON 3.84\"] \n\"16\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝PROPN 0.17\"] \n\"16\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝PUNCT 1.18\"] \n\"16\"->\"14\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝SCONJ 0.35\"] \n\"16\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝SYM 0.09\"] \n\"16\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝VERB 0.28\"] \n\"16\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"VERB➝X 0.05\"] \n\"17\"->\"1\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝ADJ 0.06\"] \n\"17\"->\"2\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝ADP 0.01\"] \n\"17\"->\"3\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝ADV 0.04\"] \n\"17\"->\"4\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝AUX 0\"] \n\"17\"->\"5\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝CCONJ 0.01\"] \n\"17\"->\"6\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝DET 0.01\"] \n\"17\"->\"7\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝INTJ 0\"] \n\"17\"->\"8\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝NOUN 0.07\"] \n\"17\"->\"9\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝NUM 0\"] \n\"17\"->\"10\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝PART 0\"] \n\"17\"->\"11\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝PRON 0.03\"] \n\"17\"->\"12\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝PROPN 0.01\"] \n\"17\"->\"13\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝PUNCT 0.07\"] \n\"17\"->\"15\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝SYM 0\"] \n\"17\"->\"16\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝VERB 0.06\"] \n\"17\"->\"17\" [penwidth = \"0.3\", fontsize = \"2\", arrowsize = \"0.4\", arrowhead = \"vee\", tooltip = \"X➝X 0.3\"] \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<p>Можно посмотреть на <a href="http://setosa.io/blog/2014/07/26/markov-chains/index.html">славную визуализацию</a> (спасибо за ссылку Марине Дубовой).</p>
+</div>
+<div id="хакерская-статистика-основано-на-статистика-для-хакеров-джейка-вандерпласа" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Хакерская статистика (основано на <a href="https://www.youtube.com/watch?v=Iq9DzN6mvYA">“Статистика для хакеров” Джейка Вандерпласа</a>)<a href="введение-в-марковские-цепи-монте-карло.html#хакерская-статистика-основано-на-статистика-для-хакеров-джейка-вандерпласа" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Вообще симуляции позволяют делать статистику более осмысленной.</p>
+<div id="биномиальные-данные-2" class="section level3 hasAnchor" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Биномиальные данные<a href="введение-в-марковские-цепи-монте-карло.html#биномиальные-данные-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="rmdtask">
+<p>
+Немного упрощая данные из статьи <span class="citation"><span class="citation">(<a href="#ref-rosenbach03" role="doc-biblioref">Rosenbach 2003</a>: 394)</span></span>, можно сказать что носители
+британского английского предпочитают <em>s</em>-генитив (90%)
+<em>of</em>-генитиву (10%). Можно ли сказать, что перед Вами носитель
+британского английского, если Вы наблюдаете в интервью актера из 120
+контекстов 100 <em>s</em>-генитивов?
+</p>
+</div>
+<p>Вероятность получить 100 успехов из 120 случаев, если мы верим, что вероятность успеха равна 0.9 описывается биномиальным распределением:</p>
+<p><span class="math display">\[P(H = h|p, n) = \binom{n}{h}\times p^h\times(1-p)^{1-h}\]</span></p>
+<p><strong>Фреквентистский подход</strong>: биномиальный тест</p>
+<ul>
+<li>H<span class="math inline">\(_0\)</span> человек говорит <em>s</em>-генитив с вероятностью 0.9</li>
+<li>α = 0.05</li>
+</ul>
+<p><img src="da4l_files/figure-html/unnamed-chunk-131-1.png" width="672" /></p>
+<p><strong>Байесовский подход</strong>: биномиальная функция правдоподобия перемножается с априорным бета распределением чтобы получить апостериорное распределение.</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">h =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.01</span>),</span>
+<span id="cb124-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">dbeta</span>(h, <span class="at">shape1 =</span> <span class="dv">100</span> <span class="sc">+</span> <span class="dv">90</span>, <span class="at">shape2 =</span> <span class="dv">20</span> <span class="sc">+</span> <span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb124-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(h, y))<span class="sc">+</span></span>
+<span id="cb124-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span></span>
+<span id="cb124-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">ifelse</span>(h<span class="sc">&gt;=</span><span class="fu">qbeta</span>(<span class="fl">0.025</span>, <span class="at">shape1 =</span> <span class="dv">100</span> <span class="sc">+</span> <span class="dv">90</span>, <span class="at">shape2 =</span> <span class="dv">20</span> <span class="sc">+</span> <span class="dv">10</span>) <span class="sc">&amp;</span></span>
+<span id="cb124-6"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-6" aria-hidden="true" tabindex="-1"></a>                           h<span class="sc">&lt;=</span><span class="fu">qbeta</span>(<span class="fl">0.975</span>, <span class="at">shape1 =</span> <span class="dv">100</span> <span class="sc">+</span> <span class="dv">90</span>, <span class="at">shape2 =</span> <span class="dv">20</span> <span class="sc">+</span> <span class="dv">10</span>), h, <span class="cn">NA</span>)), <span class="at">fill =</span> <span class="st">&quot;darkgreen&quot;</span>)<span class="sc">+</span></span>
+<span id="cb124-7"><a href="введение-в-марковские-цепи-монте-карло.html#cb124-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">100</span><span class="sc">/</span><span class="dv">120</span>, <span class="at">linetype =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-132-1.png" width="672" /></p>
+<p><strong>Хакерский подход</strong>: симуляция:</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb125-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, <span class="cf">function</span>(i){</span>
+<span id="cb125-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="dv">120</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb125-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sum</span>()</span>
+<span id="cb125-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-5" aria-hidden="true" tabindex="-1"></a>}) <span class="ot">-&gt;</span></span>
+<span id="cb125-6"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-6" aria-hidden="true" tabindex="-1"></a>  simulations</span>
+<span id="cb125-7"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb125-8"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">sum =</span> simulations) <span class="sc">%&gt;%</span> </span>
+<span id="cb125-9"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">greater =</span> sum <span class="sc">&lt;=</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb125-10"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(greater) <span class="sc">%&gt;%</span> </span>
+<span id="cb125-11"><a href="введение-в-марковские-цепи-монте-карло.html#cb125-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">number =</span> <span class="fu">n</span>())</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["greater"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["number"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"978"},{"1":"TRUE","2":"22"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">sum =</span> simulations) <span class="sc">%&gt;%</span> </span>
+<span id="cb126-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb126-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(sum))<span class="sc">+</span></span>
+<span id="cb126-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb126-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>()<span class="sc">+</span></span>
+<span id="cb126-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb126-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">100</span>, <span class="at">linetype =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb126-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb126-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span><span class="sc">*</span><span class="dv">20</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">120</span>))</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-133-1.png" width="672" /></p>
+<p>Аналогично можно использовать:</p>
+<ul>
+<li>случайное перемешивание вместо двухвыборочного t-теста;</li>
+<li>бутстрэп вместо одновыборочного t-теста.</li>
+</ul>
+</div>
+<div id="метод-монте-карло" class="section level3 hasAnchor" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> Метод Монте-Карло<a href="введение-в-марковские-цепи-монте-карло.html#метод-монте-карло" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Группа методов изучения случайных процессов, которые базируются на:</p>
+<ul>
+<li>возможности производить бесконечного количества случайных значений</li>
+<li>для известных или новых распределений</li>
+</ul>
+<p>Представим себе, что у нас есть какой-то интеграл, который мы хотим посчитать. Например такой:</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">length.out =</span> <span class="dv">1000</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb127-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb127-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x))<span class="sc">+</span></span>
+<span id="cb127-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb127-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>}, <span class="at">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-134-1.png" width="672" /></p>
+<p>Мы можем насэмплировать точек из комбинации двух унимодальных распределений u(0, 1), и u(0, 1.2) и посмотреть, кто попадает в область, а кто нет:</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb128-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="fl">1e3</span>, <span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb128-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">runif</span>(<span class="fl">1e3</span>, <span class="dv">0</span>, <span class="fl">1.2</span>),</span>
+<span id="cb128-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">in_area =</span> y <span class="sc">&lt;</span> x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb128-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, y))<span class="sc">+</span></span>
+<span id="cb128-6"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_function</span>(<span class="at">fun =</span> <span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>}, <span class="at">geom =</span> <span class="st">&quot;area&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>)<span class="sc">+</span></span>
+<span id="cb128-7"><a href="введение-в-марковские-цепи-монте-карло.html#cb128-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> in_area), <span class="at">show.legend =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+<p>Сколько попало?</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb129-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="fl">1e3</span>, <span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb129-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb129-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">runif</span>(<span class="fl">1e3</span>, <span class="dv">0</span>, <span class="fl">1.2</span>),</span>
+<span id="cb129-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb129-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">in_area =</span> y <span class="sc">&lt;</span> x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb129-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb129-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(in_area)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["in_area"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"472"},{"1":"TRUE","2":"528"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="dv">528</span><span class="sc">/</span><span class="dv">1000</span><span class="sc">*</span><span class="fl">1.2</span></span></code></pre></div>
+<pre><code>[1] 0.6336</code></pre>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integrate</span>(<span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>}, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>0.6172254 with absolute error &lt; 0.0000000000000069</code></pre>
+<p>А если увеличить количество наблюдений?</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb134-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">x =</span> <span class="fu">runif</span>(<span class="fl">1e7</span>, <span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb134-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb134-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">runif</span>(<span class="fl">1e7</span>, <span class="dv">0</span>, <span class="fl">1.2</span>),</span>
+<span id="cb134-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb134-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">in_area =</span> y <span class="sc">&lt;</span> x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb134-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb134-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(in_area)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["in_area"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"4856333"},{"1":"TRUE","2":"5143667"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="dv">5143667</span><span class="sc">/</span><span class="dv">10000000</span><span class="sc">*</span><span class="fl">1.2</span></span></code></pre></div>
+<pre><code>[1] 0.61724</code></pre>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">integrate</span>(<span class="cf">function</span>(x){x<span class="sc">^</span><span class="dv">12</span><span class="sc">-</span><span class="fu">sin</span>(x)<span class="sc">+</span><span class="dv">1</span>}, <span class="dv">0</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>0.6172254 with absolute error &lt; 0.0000000000000069</code></pre>
+</div>
+</div>
+<div id="соединение-идей-марковских-цепей-и-монте-карло" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> Соединение идей Марковских цепей и Монте-Карло<a href="введение-в-марковские-цепи-монте-карло.html#соединение-идей-марковских-цепей-и-монте-карло" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb139-1" aria-hidden="true" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runGitHub</span>(<span class="st">&quot;agricolamz/mcmc_shiny&quot;</span>)</span></code></pre></div>
+<p>Основные проблемы MCMC:</p>
+<ul>
+<li>Зависимость от начального значения. Решение: выкинуть начальную часть цепи (burn-in).</li>
+<li>Полученные значения автокоррелируют, так как они были получины при помощи марковского процесса. Решение: брать, например, каждое третье значение.</li>
+</ul>
+<p>Вы можете почитать историю идей MCMC в работе <span class="citation">(<a href="#ref-robert11" role="doc-biblioref">Robert and Casella 2011</a>)</span> (<a href="https://arxiv.org/pdf/0808.2902.pdf">доступна здесь</a>).</p>
+</div>
+<div id="brms" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> <code>brms</code><a href="введение-в-марковские-цепи-монте-карло.html#brms" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Для вычисления всяких сложных статистических моделей люди придумали вероятностные языки программирования. Чаще всего они являются расширением для стандартных языков программирования, но иногда становятся самодостаточными языками (однако они все равно написаны на каких-то быстрых языках программирования типа C++). Примерами таких самодостаточных языков является:</p>
+<ul>
+<li>BUGS (Bayesian inference Using Gibbs Sampling)</li>
+<li>JAGS (Just Another Gibbs Sampler)</li>
+<li>NIMBLE</li>
+<li>NUTS (No-U-Turn-Sampler)</li>
+<li>Stan</li>
+</ul>
+<p>Для них пишут обертки на разных языках, мы будем использовать пакет <code>brms</code>, который является оберткой над пакетом <code>rstan</code>, который является оберткой для Stan. Вы можете установить эти пакеты к себе на компьютер, но есть высокая вероятность, что что-то пойдет не так, в связи с чем, я предлагаю всем использовать rstudio.cloud для примеров на <code>brms</code>.</p>
+<p>Чтобы повторить примеры Вам нужно:</p>
+<ul>
+<li>Установить на свой компьютер <code>rstan</code> (<a href="https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started">инструкции</a>) и <code>brms</code></li>
+</ul>
+<p>Если на вашем компьютере не выходит, попробуйте &lt;rstudio.cloud&gt;</p>
+<div id="регрессионный-пример" class="section level3 hasAnchor" number="9.4.1">
+<h3><span class="header-section-number">9.4.1</span> Регрессионный пример<a href="введение-в-марковские-цепи-монте-карло.html#регрессионный-пример" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="rmdtask">
+<p>
+В работе <span class="citation"><span class="citation">(<a href="#ref-coretta2016" role="doc-biblioref">Coretta 2016</a>)</span></span> собраны <a
+href="https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv">данные</a>
+длительности исландских гласных. Отфильтруйте данные, произнесенные
+носителем <code>tt01</code> (переменная <code>speaker</code>), и
+смоделируйте длительность гласных (переменная <code>vowel.dur</code>)
+нормальным распределением используя в качестве априорного распределения
+нормальное распределение со средним 275 и стандартным отклонением 65
+(основано на <span class="citation"><span class="citation">(<a href="#ref-hillenbrand95" role="doc-biblioref">Hillenbrand et al. 1995</a>)</span></span>).
+</p>
+</div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb140-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb140-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(speaker <span class="sc">==</span> <span class="st">&quot;tt01&quot;</span>) <span class="ot">-&gt;</span></span>
+<span id="cb140-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb140-3" aria-hidden="true" tabindex="-1"></a>  vowel_data</span></code></pre></div>
+<p>В качестве первого этапа стоит сформулировать модель и посмотреть, в какой форме от нас ожидают априорное распределение.</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb141-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb141-2" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(vowel.dur <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Intercept, </span>
+<span id="cb141-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb141-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">family =</span> <span class="st">&quot;normal&quot;</span>,</span>
+<span id="cb141-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb141-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> vowel_data)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"Intercept","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 17.7)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Сделаем нашу первую модель:</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb142-1" aria-hidden="true" tabindex="-1"></a>normal_fit <span class="ot">&lt;-</span> <span class="fu">brm</span>(vowel.dur <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> Intercept, </span>
+<span id="cb142-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb142-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">family =</span> <span class="st">&quot;normal&quot;</span>,</span>
+<span id="cb142-3"><a href="введение-в-марковские-цепи-монте-карло.html#cb142-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> vowel_data,</span>
+<span id="cb142-4"><a href="введение-в-марковские-цепи-монте-карло.html#cb142-4" aria-hidden="true" tabindex="-1"></a>                  <span class="at">prior =</span> <span class="fu">c</span>(<span class="fu">prior</span>(<span class="fu">normal</span>(<span class="dv">275</span>, <span class="dv">65</span>), <span class="at">coef =</span> Intercept)),</span>
+<span id="cb142-5"><a href="введение-в-марковские-цепи-монте-карло.html#cb142-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>
+SAMPLING FOR MODEL &#39;f8620c31edb9ae4be8203def3fec2653&#39; NOW (CHAIN 1).
+Chain 1: 
+Chain 1: Gradient evaluation took 1e-05 seconds
+Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.1 seconds.
+Chain 1: Adjust your expectations accordingly!
+Chain 1: 
+Chain 1: 
+Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 1: 
+Chain 1:  Elapsed Time: 0.01396 seconds (Warm-up)
+Chain 1:                0.009019 seconds (Sampling)
+Chain 1:                0.022979 seconds (Total)
+Chain 1: 
+
+SAMPLING FOR MODEL &#39;f8620c31edb9ae4be8203def3fec2653&#39; NOW (CHAIN 2).
+Chain 2: 
+Chain 2: Gradient evaluation took 5e-06 seconds
+Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
+Chain 2: Adjust your expectations accordingly!
+Chain 2: 
+Chain 2: 
+Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 2: 
+Chain 2:  Elapsed Time: 0.013054 seconds (Warm-up)
+Chain 2:                0.009854 seconds (Sampling)
+Chain 2:                0.022908 seconds (Total)
+Chain 2: 
+
+SAMPLING FOR MODEL &#39;f8620c31edb9ae4be8203def3fec2653&#39; NOW (CHAIN 3).
+Chain 3: 
+Chain 3: Gradient evaluation took 4e-06 seconds
+Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 3: Adjust your expectations accordingly!
+Chain 3: 
+Chain 3: 
+Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 3: 
+Chain 3:  Elapsed Time: 0.012447 seconds (Warm-up)
+Chain 3:                0.010284 seconds (Sampling)
+Chain 3:                0.022731 seconds (Total)
+Chain 3: 
+
+SAMPLING FOR MODEL &#39;f8620c31edb9ae4be8203def3fec2653&#39; NOW (CHAIN 4).
+Chain 4: 
+Chain 4: Gradient evaluation took 4e-06 seconds
+Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
+Chain 4: Adjust your expectations accordingly!
+Chain 4: 
+Chain 4: 
+Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+Chain 4: 
+Chain 4:  Elapsed Time: 0.011714 seconds (Warm-up)
+Chain 4:                0.009651 seconds (Sampling)
+Chain 4:                0.021365 seconds (Total)
+Chain 4: </code></pre>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb144-1" aria-hidden="true" tabindex="-1"></a>normal_fit</span></code></pre></div>
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: vowel.dur ~ 0 + Intercept 
+   Data: vowel_data (Number of observations: 175) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Population-Level Effects: 
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept    89.53      1.93    85.76    93.26 1.00     3155     2162
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma    24.98      1.28    22.62    27.60 1.00     4167     3039
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>Визуализируем нашу модель:</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(normal_fit)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-142-1.png" width="672" /></p>
+<p>После того как мы сгенерировали наши распределения, мы можем их достать и что-нибудь посчитать:</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_draws_array</span>(normal_fit) <span class="sc">%&gt;%</span> </span>
+<span id="cb147-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb147-2" aria-hidden="true" tabindex="-1"></a>  posterior<span class="sc">::</span><span class="fu">summarize_draws</span>()</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["median"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mad"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["q5"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["q95"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["rhat"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["ess_bulk"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["ess_tail"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"b_Intercept","2":"89.53186","3":"89.55122","4":"1.9253914","5":"1.894501","6":"86.37373","7":"92.62781","8":"1.000294","9":"3155.186","10":"2162.195"},{"1":"sigma","2":"24.97836","3":"24.93944","4":"1.2793220","5":"1.287759","6":"22.95309","7":"27.13646","8":"1.001614","9":"4167.479","10":"3039.491"},{"1":"lp__","2":"-821.53083","3":"-821.23781","4":"0.9888982","5":"0.700680","6":"-823.45228","7":"-820.60244","8":"1.002011","9":"1917.317","10":"2471.557"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_draws_rvars</span>(normal_fit)</span></code></pre></div>
+<pre><code># A draws_rvars: 1000 iterations, 4 chains, and 3 variables
+$b_Intercept: rvar&lt;1000,4&gt;[1] mean ± sd:
+[1] 90 ± 1.9 
+
+$sigma: rvar&lt;1000,4&gt;[1] mean ± sd:
+[1] 25 ± 1.3 
+
+$lp__: rvar&lt;1000,4&gt;[1] mean ± sd:
+[1] -822 ± 0.99 </code></pre>
+<p>Можно визуально оценить, где лежат наши данные, а что предсказывает полученная модель:</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pp_check</span>(normal_fit)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-144-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+<h3>Ссылки на литературу<a href="ссылки-на-литературу.html#ссылки-на-литературу" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-coretta2016" class="csl-entry">
+Coretta, Stefano. 2016. <span>“Vowel Duration and Aspiration Effects in Icelandic.”</span> University of York.
+</div>
+<div id="ref-hillenbrand95" class="csl-entry">
+Hillenbrand, James, Laura A Getty, Michael J Clark, and Kimberlee Wheeler. 1995. <span>“Acoustic Characteristics of American English Vowels.”</span> <em>The Journal of the Acoustical Society of America</em> 97 (5): 3099–3111.
+</div>
+<div id="ref-robert11" class="csl-entry">
+Robert, C., and G. Casella. 2011. <span>“A Short History of Markov Chain Monte Carlo: Subjective Recollections from Incomplete Data.”</span> <em>Statistical Science</em> 26 (1): 102–15.
+</div>
+<div id="ref-rosenbach03" class="csl-entry">
+Rosenbach, Anette. 2003. <span>“Aspects of Iconicity and Economy in the Choice Between the <em>s-</em>Genitive and the <em>of-</em>Genitive in <span>E</span>nglish.”</span> In <em>Determinants of Grammatical Variation in English</em>, edited by Günter Rohdenburg and Britta Mondorf. Berlin, New York: Mouton de Gruyter.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="эмпирическая-байесовская-оценка.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ссылки-на-литературу.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/agricolamz/2022_da4l/edit/master/08-Introduction-to-MCMC.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["da4l.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"self_contained": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
