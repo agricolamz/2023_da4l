@@ -205,9 +205,6 @@ read_csv("https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Cor
   filter(speaker == "tt01") ->
   vowels
 
-sd_data <- 
-mean_data <- mean(vowels$vowel.dur)
-
 m1 <- function(x) dnorm(x, 87, 25) * dnorm(x, 
                                            mean(vowels$vowel.dur),
                                            sd(vowels$vowel.dur))
