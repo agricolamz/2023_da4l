@@ -153,7 +153,7 @@ as_draws_array(fit_intercept) %>%
   labs(x = "количество слов", y = "", subtitle = "Серое -- данные, синие -- апостериорное распределение")
 ```
 
-[Оригинал мема](https://cs.pikabu.ru/post_img/2013/05/08/10/1368028088_2034545627.jpg). Вот [еще один](https://demotions.ru/38886--nu-dopustim-myau.html).
+[Если вам хочется вспомнить мем](https://cs.pikabu.ru/post_img/2013/05/08/10/1368028088_2034545627.jpg). Вот [еще один](https://demotions.ru/38886--nu-dopustim-myau.html).
 
 ### Модель только с угловым коэффициентом
 
