@@ -1,0 +1,423 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Ограничения на применение регрессии
+
+```{r setup09, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(tidyverse)
+theme_set(theme_bw())
+```
+
+```{r}
+library(tidyverse)
+```
+
+## Основы регрессионного анализа
+
+```{r, echo=FALSE, warning=FALSE}
+set.seed(42)
+tibble(x = rnorm(150)+1) %>% 
+  mutate(y = 5*x+10+rnorm(100, sd = 2)) %>% 
+  ggplot(aes(x, y))+
+  geom_point()+
+  geom_hline(yintercept = 0, linetype = 2)+
+  geom_vline(xintercept = 0, linetype = 2)+
+  geom_smooth(method = "lm", se = FALSE)+
+  annotate(geom = "point", x = 0, y = 10, size = 4, color = "red")+
+  annotate(geom = "label", x = -0.5, y = 12, size = 5, color = "red", label = "intercept")+
+  annotate(geom = "label", x = 2, y = 12.5, size = 5, color = "red", label = "slope")+
+  scale_x_continuous(breaks = -2:4)+
+  scale_y_continuous(breaks = c(0:3*10, 15))
+pBrackets::grid.brackets(815, 420, 815, 545, lwd=2, col="red")
+```
+
+Когда мы используем регрессионный анализ, мы пытаемся оценить два параметра:
+
+* свободный член (intercept) -- значение $y$ при $x = 0$;
+* угловой коэффициент (slope) -- изменение $y$ при изменении $x$ на одну единицу.
+
+$$y_i = \beta_0 + \beta_1\times x_i + \epsilon_i$$
+
+Причем, иногда мы можем один или другой параметр считать равным нулю.
+
+```{block, type = "rmdtask"}
+Определите по графику формулу синей прямой.
+```
+
+При этом, вне зависимости от статистической школы, у регрессии есть свои ограничения на применение:
+
+* линейность связи между $x$ и $y$;
+* нормальность распределение остатков $\epsilon_i$;
+* гомоскидастичность --- равномерность распределения остатков на всем протяжении $x$;
+* независимость переменных;
+* независимость наблюдений друг от друга.
+
+## Нелинейность взаимосвязи
+
+Давайте восползуемся данными из пакета [`Rling` Натальи Левшиной](https://benjamins.com/sites/z.195/content/package.html). В датасете 100 произвольно выбранных слов из проекта English Lexicon Project (Balota et al. 2007), их длина, среднее время реакции и частота в корпусе.
+
+```{r, message=FALSE, warning=FALSE}
+ldt <- read_csv("https://goo.gl/ToxfU6")
+ldt
+```
+
+Давайте посмотрим на простой график:
+
+```{r}
+ldt %>% 
+  ggplot(aes(Mean_RT, Freq))+
+  geom_point()+
+  theme_bw()
+```
+
+Регрессия на таких данных будет супер неиформативна:
+
+```{r}
+ldt %>% 
+  ggplot(aes(Mean_RT, Freq))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  theme_bw()
+
+m1 <- summary(lm(Mean_RT~Freq, data = ldt))
+m1
+```
+
+### Логарифмирование
+
+```{r}
+ldt %>% 
+  ggplot(aes(Mean_RT, log(Freq)))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  theme_bw()
+
+ldt %>% 
+  ggplot(aes(Mean_RT, log(Freq+1)))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  theme_bw()
+
+m2 <- summary(lm(Mean_RT~log(Freq+1), data = ldt))
+m2
+m1$adj.r.squared
+m2$adj.r.squared
+```
+
+Отлогорифмировать можно и другую переменную.
+```{r}
+ldt %>% 
+  ggplot(aes(log(Mean_RT), log(Freq  + 1)))+
+  geom_point()+
+  geom_smooth(method = "lm")+
+  theme_bw()
+
+m3 <- summary(lm(log(Mean_RT)~log(Freq+1), data = ldt))
+m1$adj.r.squared
+m2$adj.r.squared
+m3$adj.r.squared
+```
+
+Как интерпретировать полученную регрессию с двумя отлогорифмированными значениями?
+
+В обычной линейной регресии мы узнаем отношения между $x$ и  $y$:
+$$y_i = \beta_0+\beta_1\times x_i$$
+
+Как изменится $y_j$, если мы увеличем $x_i + 1 = x_j$?
+$$y_j = \beta_0+\beta_1\times x_j$$
+
+$$y_j - y_i = \beta_0+\beta_1\times x_j - (\beta_0+\beta_1\times x_i)  = \beta_1(x_j - x_i)$$
+
+Т. е. $y$ увеличится на $\beta_1$ , если $x$ увеличится на 1. Что же будет с логарифмированными переменными? Как изменится $y_j$, если мы увеличем $x_i + 1 = x_j$?
+
+$$\log(y_j) - \log(y_i) = \beta_1\times (\log(x_j) - \log(x_i))$$
+
+$$\log\left(\frac{y_j}{y_i}\right) = \beta_1\times \log\left(\frac{x_j}{x_i}\right) = \log\left(\left(\frac{x_j}{x_i}\right) ^ {\beta_1}\right)$$
+
+$$\frac{y_j}{y_i}= \left(\frac{x_j}{x_i}\right) ^ {\beta_1}$$
+
+Т. е. $y$ увеличится на $\beta_1$ процентов, если $x$ увеличится на 1 процент.
+
+Логарифмирование --- не единственный вид траснформации:
+
+* трансформация Тьюки
+```{r, eval = FALSE}
+shiny::runGitHub("agricolamz/tukey_transform")
+```
+
+```{r, echo= FALSE}
+data.frame(cors = c(sapply(seq(-5, -0.01, 0.01), function(i){
+  abs(cor(ldt$Mean_RT, -(ldt$Freq+1)^i))
+}),
+abs(cor(ldt$Mean_RT, log(ldt$Freq+1))),
+sapply(seq(0.01, 5, 0.01), function(i){
+  abs(cor(ldt$Mean_RT, (ldt$Freq+1)^i))
+})),
+bandwidth = seq(-5, 5, 0.01)) %>%
+  ggplot(aes(bandwidth, cors))+
+  geom_line()+
+  theme_bw()+
+  geom_vline(xintercept = 0.1, linetype = 2)+
+  labs(y = "correlation",
+       title = "average reaction time ~ Tukey transformed word frequencies")
+```
+
+* трансформация Бокса — Кокса
+* ...
+
+```{block, type = "rmdtask"}
+В [датасет](https://raw.githubusercontent.com/agricolamz/2021_da4l/master/data/freq_dict_2009.csv) собрана частотность разных лемм на основании корпуса НКРЯ [@lyashevskaya09] (в датасете только значения больше ipm > 10). Известно, что частотность слова связана с рангом слова (см. закон Ципфа). Постройте переменную ранга и визуализируйте связь ранга и логорифма частотности с разбивкой по частям речи. Какие части речи так и не приобрели после трансформации "приемлимую" линейную форму? (я насчитал 5 таких)
+```
+
+```{r, include=FALSE}
+df <- read_tsv("data/freq_dict_2009.csv")
+df %>%
+  group_by(pos) %>% 
+  mutate(id = 1:n()) %>% 
+  ggplot(aes(id, log(freq_ipm)))+
+  geom_point()+
+  facet_wrap(~pos, scale = "free")
+```
+
+
+```{r, results='asis', echo=FALSE}
+library(checkdown)
+check_question(answer = c("a", "adv", "s", "s.PROP", "v"), options = sort(unique(df$pos)), type = "checkbox")
+```
+
+## Нормальность распределение остатков
+
+Линейная регрессия предполагает нормальность распределения остатков. Когда связь не линейна, то остатки тоже будут распределены не нормально.
+
+Можно смотреть на первый график используя функцию `plot(m1)` --- график остатков. Интерпретаций этого графика достаточно много (см. [статью про это](http://docs.statwing.com/interpreting-residual-plots-to-improve-your-regression/)).
+
+Можно смотреть на qqplot:
+
+```{r, message=FALSE}
+tibble(res = m1$residuals) %>% 
+  ggplot(aes(res))+
+  geom_histogram(aes(y = ..density..))+
+  stat_function(fun = dnorm, args = list(mean = 0, sd = sd(m1$residuals)), color = "red")
+
+qqnorm(m1$residuals)
+qqline(m1$residuals)
+
+tibble(res = m2$residuals) %>% 
+  ggplot(aes(res))+
+  geom_histogram(aes(y = ..density..))+
+  stat_function(fun = dnorm, args = list(mean = 0, sd = sd(m2$residuals)), color = "red")
+qqnorm(m2$residuals)
+qqline(m2$residuals)
+
+tibble(res = m3$residuals) %>% 
+  ggplot(aes(res))+
+  geom_histogram(aes(y = ..density..))+
+  stat_function(fun = dnorm, args = list(mean = 0, sd = sd(m3$residuals)), color = "red")
+qqnorm(m3$residuals)
+qqline(m3$residuals)
+```
+
+## Гетероскидастичность
+Распределение остатков непостоянно (т.е. не гомоскидастичны):
+```{r}
+ldt %>% 
+  ggplot(aes(Mean_RT, Freq))+
+  geom_point()+
+  theme_bw()
+```
+
+Тоже решается преобазованием данных.
+
+## Мультиколлинеарность
+Линейная связь между некоторыми предикторами в модели.
+
+* корреляционная матрица
+* VIF (Variance inflation factor), `car::vif()`
+  * VIF = 1 (Not correlated)
+  * 1 < VIF < 5 (Moderately correlated)
+  * VIF >=5 (Highly correlated)
+
+## Независимость наблюдений
+Наблюдения должны быть независимы. В ином случае нужно использовать модель со смешанными эффектами.
+
+### Линейная модель со смешанными эффектами
+
+В качестве примера мы попробуем поиграть с [законом Хердана-Хипса](https://en.wikipedia.org/wiki/Heaps%27_law), описывающий взаимосвязь количества уникальных слов в тексте в зависимости от длины текста. В датасете собраны некоторые корпуса Universal Dependencies [@ud20] и некоторые числа, посчитанные на их основании:
+
+```{r, message=FALSE}
+ud <- read_csv("https://raw.githubusercontent.com/agricolamz/2021_da4l/master/data/ud_corpora.csv")
+
+ud %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()+
+  facet_wrap(~corpus, scale = "free")+
+  geom_smooth(method = "lm", se = FALSE)+
+  labs(x = "количество слов", 
+       y = "количество уникальных слов",
+       caption = "данные корпусов Universal Dependencies")
+```
+
+Связь между переменными безусловно линейная, однако в разных корпусах представлена разная перспектива: для каких-то корпусов, видимо, тексты специально нарезались, так что тексты таких корпусов содержат от 30-40 до 50-80 слов, а какие-то оставались не тронутыми. Чтобы показать, что связь есть, нельзя просто "слить" все наблюдения в один котел (см. [парадокс Симпсона](https://en.wikipedia.org/wiki/Simpson%27s_paradox)), так как это нарушит предположение регрессии о независимости наблюдений. Мы не можем включить переменную `corpus` в качестве dummy-переменной: тогда один из корпусов попадет в интерсепт (станет своего рода базовым уровенем), а остальные будут от него отсчитываться. К тому же не очень понятно, как работать с новыми данными из других корпусов: ведь мы хотим предсказывать значения обобщенно, вне зависимости от корпуса.
+
+При моделировании при помощи моделей со случайными эффектами различают:
+
+* *основные эффекты* -- это те связи, которые нас интересуют, независимые переменные (количество слов, количество уникальных слов);
+* *случайные эффекты* -- это те переменные, которые создают группировку в данных (корпус).
+
+В результате моделирования появляется обобщенная модель, которая игнорирует группировку, а потом для каждого значения случайного эффекта генерируется своя регрессия, отсчитывая от обобщенной модели как от базового уровня.
+
+Рассмотрим простейший случай:
+
+```{r, message = FALSE}
+library(lme4)
+library(lmerTest)
+
+fit1 <- lmer(n_tokens~n_words+(1|corpus), data = ud)
+summary(fit1)
+
+ud %>% 
+  mutate(predicted = predict(fit1)) %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()+
+  facet_wrap(~corpus, scale = "free")+
+  geom_line(aes(y = predicted), color = "red") +
+  labs(x = "количество слов", 
+       y = "количество уникальных слов",
+       caption = "данные корпусов Universal Dependencies")
+```
+
+Можно посмотреть на предсказания модели (основные эффекты):
+
+```{r}
+library(ggeffects)
+ggeffect(fit1) %>% 
+  plot()
+```
+
+```{block, type = "rmdtask"}
+Визуализируйте полученные модели при помощи функции `plot()`. Какие ограничения на применение линейной регрессии нарушается в наших моделях?
+```
+
+```{r}
+plot(fit1)
+```
+
+В данном случае мы предполагаем, что случайный эффект имеет случайный свободный член. Т.е. все получающиеся линии параллельны, так как имеют общий угловой коэффициент. Можно допустить большую свободу и сделать так, чтобы в случайном эффекте были не только интерсепт, но и свободный член:
+
+```{r}
+fit2 <- lmer(n_tokens~n_words+(1+n_words|corpus), data = ud)
+summary(fit2)
+
+ud %>% 
+  mutate(predicted = predict(fit2)) %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()+
+  facet_wrap(~corpus, scale = "free")+
+  geom_line(aes(y = predicted), color = "red") +
+  labs(x = "количество слов", 
+       y = "количество уникальных слов",
+       caption = "данные корпусов Universal Dependencies")
+```
+
+
+Можно посмотреть на предсказания модели (основные эффекты):
+
+```{r}
+ggeffect(fit2) %>% 
+  plot()
+```
+
+Нарушения все те же:
+
+```{r}
+plot(fit2)
+```
+
+При желании мы можем также построить модель, в которой в случайном эффекте будет лишь угловой коэффициент, а свободный член будет фиксированным:
+
+```{r}
+fit3 <- lmer(n_tokens~n_words+(0+n_words|corpus), data = ud)
+summary(fit3)
+
+ud %>% 
+  mutate(predicted = predict(fit3)) %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()+
+  facet_wrap(~corpus, scale = "free")+
+  geom_line(aes(y = predicted), color = "red") +
+  labs(x = "количество слов", 
+       y = "количество уникальных слов",
+       caption = "данные корпусов Universal Dependencies")
+```
+
+Линии получились очень похожими, но разными:
+
+![](images/lmer.gif)
+
+Можно посмотреть на предсказания модели (основные эффекты):
+
+```{r}
+ggeffect(fit3) %>% 
+  plot()
+```
+
+Нарушения все те же:
+
+```{r}
+plot(fit3)
+```
+
+Сравним полученные модели:
+```{r}
+anova(fit3, fit2, fit1)
+```
+
+```{block, type = "rmdtask"}
+Постройте модель со случайными угловым коэффициентом и свободным членом, устранив проблему, которую вы заметили в прошлом задании.
+```
+
+
+```{r, include = FALSE}
+ud %>% 
+  filter(corpus != "UD_Arabic-PADT") ->
+  ud2
+
+fit4 <- lmer(n_tokens~n_words+(n_words|corpus), data = ud2)
+summary(fit4)
+
+ud2 %>% 
+  mutate(predicted = predict(fit4)) %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()+
+  facet_wrap(~corpus, scale = "free")+
+  geom_line(aes(y = predicted), color = "red") +
+  labs(x = "количество слов", 
+       y = "количество уникальных слов",
+       caption = "данные корпусов Universal Dependencies")
+```
+
+```{block, type = "rmdtask"}
+Пользуясь знаниями из предыдущих заданий, смоделируйте связь количества слов и количества существительных. С какими проблемами вы столкнулись?
+```
+
+```{r, include = FALSE, error=TRUE}
+ud %>% 
+  filter(corpus != "UD_Arabic-PADT") ->
+  ud2
+
+fit5 <- lmer(n_tokens~n_nouns+(n_nouns|corpus), data = ud2)
+summary(fit4)
+
+ud2 %>% 
+  mutate(predicted = predict(fit4)) %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()+
+  facet_wrap(~corpus, scale = "free")+
+  geom_line(aes(y = predicted), color = "red") +
+  labs(x = "количество слов", 
+       y = "количество уникальных слов",
+       caption = "данные корпусов Universal Dependencies")
+```

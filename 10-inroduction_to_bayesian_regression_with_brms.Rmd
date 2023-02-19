@@ -1,0 +1,282 @@
+---
+editor_options: 
+  chunk_output_type: console
+---
+
+# Байесовский регрессионный анализ
+
+```{r setup10, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+library(tidyverse)
+theme_set(theme_bw())
+```
+
+```{r}
+library(tidyverse)
+```
+
+## Основы регрессионного анализа
+
+```{r, echo=FALSE, warning=FALSE}
+set.seed(42)
+tibble(x = rnorm(150)+1) %>% 
+  mutate(y = 5*x+10+rnorm(100, sd = 2)) %>% 
+  ggplot(aes(x, y))+
+  geom_point()+
+  geom_hline(yintercept = 0, linetype = 2)+
+  geom_vline(xintercept = 0, linetype = 2)+
+  geom_smooth(method = "lm", se = FALSE)+
+  annotate(geom = "point", x = 0, y = 10, size = 4, color = "red")+
+  annotate(geom = "label", x = -0.5, y = 12, size = 5, color = "red", label = "intercept")+
+  annotate(geom = "label", x = 2, y = 12.5, size = 5, color = "red", label = "slope")+
+  scale_x_continuous(breaks = -2:4)+
+  scale_y_continuous(breaks = c(0:3*10, 15))
+pBrackets::grid.brackets(815, 420, 815, 545, lwd=2, col="red")
+```
+
+Когда мы используем регрессионный анализ, мы пытаемся оценить два параметра:
+
+* свободный член (intercept) -- значение $y$ при $x = 0$;
+* угловой коэффициент (slope) -- изменение $y$ при изменении $x$ на одну единицу.
+
+$$y_i = \beta_0 + \beta_1\times x_i + \epsilon_i$$
+
+Причем, иногда мы можем один или другой параметр считать равным нулю.
+
+При этом, вне зависимости от статистической школы, у регрессии есть свои ограничения на применение:
+
+* линейность связи между $x$ и $y$;
+* нормальность распределение остатков $\epsilon_i$;
+* гомоскидастичность --- равномерность распределения остатков на всем протяжении $x$;
+* независимость переменных;
+* независимость наблюдений друг от друга.
+
+## `brms`
+
+Для анализа возьмем датасет, который я составил из UD-корпусов и попробуем смоделировать связь между количеством слов в тексте и количеством уникальных слов ([закон Хердана-Хипса](https://en.wikipedia.org/wiki/Heaps%27_law)).
+
+```{r}
+ud <- read_csv("https://raw.githubusercontent.com/agricolamz/udpipe_count_n_words_and_tokens/master/filtered_dataset.csv")
+glimpse(ud)
+```
+
+Для начала, нарушим кучу ограничений на применение регрессии и смоделируем модель для вот таких вот данных, взяв только тексты меньше 1500 слов:
+
+```{r}
+ud %>%
+  filter(n_words < 1500) ->
+  ud
+
+ud %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_point()
+```
+
+### Модель только со свободным членом
+
+```{r}
+library(brms)
+parallel::detectCores()
+n_cores <- 7 # parallel::detectCores() - 1
+
+get_prior(n_tokens ~ 1, 
+          data = ud)
+```
+
+Вот модель с встроенными априорными распределениями:
+
+```{r brm_intercept, cache = TRUE, message=FALSE, warning=FALSE}
+fit_intercept <- brm(n_tokens ~ 1, 
+                     data = ud,
+                     cores = n_cores, refresh = 0, silent = TRUE)
+```
+
+При желании встроенные априорные расспеределения можно не использовать и вставлять в аргумент `prior` априорные распределения по вашему желанию.
+
+```{r}
+fit_intercept
+plot(fit_intercept)
+```
+
+Взято [остюда](https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup):
+
+####  R-hat
+
+R-hat convergence diagnostic compares the between- and within-chain estimates for model parameters and other univariate quantities of interest. If chains have not mixed well (ie, the between- and within-chain estimates don’t agree), R-hat is larger than 1. We recommend running at least four chains by default and only using the sample if R-hat is less than 1.01. Stan reports R-hat which is the maximum of rank normalized split-R-hat and rank normalized folded-split-R-hat, which works for thick tailed distributions and is sensitive also to differences in scale. For more details on this diagnostic, see https://arxiv.org/abs/1903.08008.
+
+Recommendations:
+
+* Look at Bulk- and Tail-ESS for further information.
+* Look at the rank plot to see how the chains differ from each other.
+* Look at the local and quantile efficiency plots.
+* You might try setting a higher value for the iter argument. By default iter is 2000
+
+#### Bulk ESS
+
+Roughly speaking, the effective sample size (ESS) of a quantity of interest captures how many independent draws contain the same amount of information as the dependent sample obtained by the MCMC algorithm. Clearly, the higher the ESS the better. Stan uses R-hat adjustment to use the between-chain information in computing the ESS. For example, in case of multimodal distributions with well-separated modes, this leads to an ESS estimate that is close to the number of distinct modes that are found.
+
+Bulk-ESS refers to the effective sample size based on the rank normalized draws. This does not directly compute the ESS relevant for computing the mean of the parameter, but instead computes a quantity that is well defined even if the chains do not have finite mean or variance. Overall bulk-ESS estimates the sampling efficiency for the location of the distribution (e.g. mean and median).
+
+Often quite smaller ESS would be sufficient for the desired estimation accuracy, but the estimation of ESS and convergence diagnostics themselves require higher ESS. We recommend requiring that the bulk-ESS is greater than 100 times the number of chains. For example, when running four chains, this corresponds to having a rank-normalized effective sample size of at least 400.
+
+Recommendations:
+
+* You might try setting a higher value for the iter argument. By default iter is 2000
+* Look at the rank plot to see how the chains differ from each other.
+* Look at the local and quantile efficiency plots.
+* Look at change in bulk-ESS when the number of iterations increase. If R-hat is less than 1.01 and bulk-ESS grows linearly with the number of iterations and eventually exceeds the recommended limit, the mixing is sufficient but MCMC has high autocorrelation requiring a large number of iterations
+
+#### Tail ESS
+
+Tail-ESS computes the minimum of the effective sample sizes (ESS) of the 5% and 95% quantiles. Tail-ESS can help diagnosing problems due to different scales of the chains and slow mixing in the tails. See also general information about ESS above in description of bulk-ESS.
+
+Recommendations:
+
+* You might try setting a higher value for the iter argument. By default iter is 2000
+* Look at the rank plot to see how the chains differ from each other.
+* Look at the local and quantile efficiency plots.
+* Look at change in tail-ESS when the number of iterations increase. If R-hat is less than 1.01 and tail-ESS grows linearly with the number of iterations and eventually exceeds the recommended limit, the mixing is sufficient but MCMC has high autocorrelation requiring a large number of iterations
+
+#### Вернемся к нашим баранам
+
+Давайте посмотрим на наши данные:
+
+```{r, echo=FALSE}
+as_draws_array(fit_intercept) %>% 
+  as_tibble() %>% 
+  select(contains("b_Intercept")) %>% 
+  pivot_longer(values_to = "n_words", names_to = "chain", everything()) %>% 
+  ggplot(aes(n_words))+
+  annotate(geom = "label", x = 800, y = 3000, label = "Ну, предположим, ква", size = 8)+
+  geom_histogram(data = ud, alpha = 0.4)+
+  geom_histogram(fill = "steelblue")+
+  labs(x = "количество слов", y = "", subtitle = "Серое -- данные, синие -- апостериорное распределение")
+```
+
+[Оригинал мема](https://cs.pikabu.ru/post_img/2013/05/08/10/1368028088_2034545627.jpg). Вот [еще один](https://demotions.ru/38886--nu-dopustim-myau.html).
+
+### Модель только с угловым коэффициентом
+
+```{r}
+get_prior(n_tokens ~ n_words+0,
+          data = ud)
+```
+
+```{r brm_slope, cache=TRUE}
+fit_slope <- brm(n_tokens ~ n_words+0, 
+                 data = ud,
+                 cores = n_cores, refresh = 0, silent = TRUE)
+```
+
+```{r}
+fit_slope
+plot(fit_slope)
+```
+
+Давайте совместим предсказания модели и наши наблюдения.
+
+```{r}
+library(tidybayes)
+
+ud %>% 
+  add_epred_draws(fit_slope, ndraws = 50) %>%  
+  ggplot(aes(n_words, n_tokens))+
+  geom_point(alpha = 0.01)+
+  stat_lineribbon(aes(y = .epred), color = "red") 
+```
+
+### Модель с угловым коэффициентом и свободным членом
+
+```{r}
+get_prior(n_tokens ~ n_words,
+          data = ud)
+```
+
+```{r brm_slope_intercept, cache=TRUE}
+fit_slope_intercept <- brm(n_tokens ~ n_words,
+                           data = ud,
+                           cores = n_cores, refresh = 0, silent = TRUE)
+```
+
+```{r}
+fit_slope_intercept
+plot(fit_slope_intercept)
+
+ud %>% 
+  add_epred_draws(fit_slope_intercept, ndraws = 50) %>%  
+  ggplot(aes(n_words, n_tokens))+
+  geom_point(alpha = 0.01)+
+  stat_lineribbon(aes(y = .epred), color = "red") 
+```
+
+### Модель со смешанными эффектами
+
+В данных есть группировка по языкам, которую мы все это время игнорировали. Давайте сделаем модель со смешанными эффектами:
+
+
+```{r}
+get_prior(n_tokens ~ n_words+(1|language),
+          data = ud)
+```
+
+```{r mixed, cache=TRUE}
+fit_mixed <- brm(n_tokens ~ n_words + (1|language),
+                 data = ud,
+                 cores = n_cores, refresh = 0, silent = TRUE)
+```
+
+```{r}
+fit_mixed
+plot(fit_mixed)
+ud %>% 
+  add_epred_draws(fit_mixed, ndraws = 50) %>%  
+  ggplot(aes(n_words, n_tokens))+
+  geom_point(alpha = 0.01)+
+  stat_lineribbon(aes(y = .epred), color = "red") +
+  facet_wrap(~language)
+```
+
+То, что получилось учитывает общий эффект всех языков: посмотрите на каталанский. Если построить модель по каждому языку, то получится совсем другая картина:
+
+```{r}
+ud %>% 
+  ggplot(aes(n_words, n_tokens))+
+  geom_smooth(method = "lm") +
+  geom_point(alpha = 0.3)+
+  facet_wrap(~language)
+```
+
+```{block, type = "rmdtask"}
+В работе [@coretta2016] собраны [данные](https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv) длительности исландских гласных. Используя байесовскую регрессию, смоделируйте длительность гласного (`vowel.dur`) в зависимости от аспирированности (`aspiration`) учитывая эффект носителя. Визуализируйте результаты модели
+```
+
+```{r, include=FALSE}
+vowels <- read_csv("https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv")
+
+vowels %>% 
+  ggplot(aes(aspiration, vowel.dur))+
+  geom_violin()+
+  facet_wrap(~speaker)
+
+get_prior(vowel.dur ~ aspiration+(1|speaker),
+          data = vowels)
+```
+
+```{r vowels_fit, cache=TRUE, include=FALSE}
+vowels_fit <- brm(vowel.dur ~ aspiration+(1|speaker),
+                  data = vowels)
+```
+
+```{r, include=FALSE}
+vowels_fit
+plot(vowels_fit)
+```
+
+```{r, echo=FALSE}
+vowels %>% 
+  add_epred_draws(vowels_fit, ndraws = 50) %>%  
+  ggplot(aes(aspiration, vowel.dur))+
+  geom_violin()+
+  stat_lineribbon(aes(y = .epred)) +
+  facet_wrap(~speaker)
+```

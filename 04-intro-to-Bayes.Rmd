@@ -2,7 +2,7 @@
 editor_options: 
   chunk_output_type: console
 ---
-
+w
 ```{r setup04, include=FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = "")
 options(scipen=999)

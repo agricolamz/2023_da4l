@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 Байесовский регрессионный анализ | Анализ данных для лингвистов</title>
+  <meta name="description" content="11 Байесовский регрессионный анализ | Анализ данных для лингвистов" />
+  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11 Байесовский регрессионный анализ | Анализ данных для лингвистов" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11 Байесовский регрессионный анализ | Анализ данных для лингвистов" />
+  
+  
+  
+
+<meta name="author" content="Г. А. Мороз" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="ограничения-на-применение-регрессии.html"/>
+<link rel="next" href="ссылки-на-литературу.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="libs/viz-1.8.2/viz.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/grViz-binding-1.0.9/grViz.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Анализ данных для лингвистов</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> О курсе</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#используемые-пакеты"><i class="fa fa-check"></i><b>1.1</b> Используемые пакеты</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#домашние-задания"><i class="fa fa-check"></i><b>1.2</b> Домашние задания</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="распределения.html"><a href="распределения.html"><i class="fa fa-check"></i><b>2</b> Распределения</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="распределения.html"><a href="распределения.html#распределения-в-r"><i class="fa fa-check"></i><b>2.1</b> Распределения в R</a></li>
+<li class="chapter" data-level="2.2" data-path="распределения.html"><a href="распределения.html#дискретные-переменные"><i class="fa fa-check"></i><b>2.2</b> Дискретные переменные</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="распределения.html"><a href="распределения.html#биномиальное-распределение"><i class="fa fa-check"></i><b>2.2.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="2.2.2" data-path="распределения.html"><a href="распределения.html#геометрическое-распределение"><i class="fa fa-check"></i><b>2.2.2</b> Геометрическое распределение</a></li>
+<li class="chapter" data-level="2.2.3" data-path="распределения.html"><a href="распределения.html#распределение-пуассона"><i class="fa fa-check"></i><b>2.2.3</b> Распределение Пуассона</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="распределения.html"><a href="распределения.html#числовые-переменные"><i class="fa fa-check"></i><b>2.3</b> Числовые переменные</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="распределения.html"><a href="распределения.html#нормальное-распределение"><i class="fa fa-check"></i><b>2.3.1</b> Нормальное распределение</a></li>
+<li class="chapter" data-level="2.3.2" data-path="распределения.html"><a href="распределения.html#логнормальное-распределение"><i class="fa fa-check"></i><b>2.3.2</b> Логнормальное распределение</a></li>
+<li class="chapter" data-level="2.3.3" data-path="распределения.html"><a href="распределения.html#что-еще-почитать-про-распределения"><i class="fa fa-check"></i><b>2.3.3</b> Что еще почитать про распределения?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html"><i class="fa fa-check"></i><b>3</b> Метод максимального правдоподобия</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#оценка-вероятности"><i class="fa fa-check"></i><b>3.1</b> Оценка вероятности</a></li>
+<li class="chapter" data-level="3.2" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#функция-правдоподобия"><i class="fa fa-check"></i><b>3.2</b> Функция правдоподобия</a></li>
+<li class="chapter" data-level="3.3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#пример-с-непрерывным-распределением"><i class="fa fa-check"></i><b>3.3</b> Пример с непрерывным распределением</a></li>
+<li class="chapter" data-level="3.4" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#метод-максимального-правдоподобия-mle"><i class="fa fa-check"></i><b>3.4</b> Метод максимального правдоподобия (MLE)</a></li>
+<li class="chapter" data-level="3.5" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#логорифм-функции-правдоподобия"><i class="fa fa-check"></i><b>3.5</b> Логорифм функции правдоподобия</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html"><i class="fa fa-check"></i><b>4</b> Модели смеси распределений</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#cмеси-распределений"><i class="fa fa-check"></i><b>4.1</b> Cмеси распределений</a></li>
+<li class="chapter" data-level="4.2" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#модели-смеси-распределений-1"><i class="fa fa-check"></i><b>4.2</b> Модели смеси распределений</a></li>
+<li class="chapter" data-level="4.3" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#несколько-замечаний"><i class="fa fa-check"></i><b>4.3</b> Несколько замечаний</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html"><i class="fa fa-check"></i><b>5</b> Байесовский статистический вывод</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#нотация"><i class="fa fa-check"></i><b>5.1</b> Нотация</a></li>
+<li class="chapter" data-level="5.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#категориальный-пример"><i class="fa fa-check"></i><b>5.2</b> Категориальный пример</a></li>
+<li class="chapter" data-level="5.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#разница-между-фриквентиским-и-байесовским-подходами"><i class="fa fa-check"></i><b>5.3</b> Разница между фриквентиским и байесовским подходами</a></li>
+<li class="chapter" data-level="5.4" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#биномиальные-данные"><i class="fa fa-check"></i><b>5.4</b> Биномиальные данные</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#биномиальное-распределение-1"><i class="fa fa-check"></i><b>5.4.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="5.4.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#бета-распределение"><i class="fa fa-check"></i><b>5.4.2</b> Бета распределение</a></li>
+<li class="chapter" data-level="5.4.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-биномиальных-данных"><i class="fa fa-check"></i><b>5.4.3</b> Байесовский апдейт биномиальных данных</a></li>
+<li class="chapter" data-level="5.4.4" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-биномиальных-данных-несколько-моделей"><i class="fa fa-check"></i><b>5.4.4</b> Байесовский апдейт биномиальных данных: несколько моделей</a></li>
+<li class="chapter" data-level="5.4.5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#что-почитать"><i class="fa fa-check"></i><b>5.4.5</b> Что почитать?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения"><i class="fa fa-check"></i><b>5.5</b> Байесовский апдейт нормального распределения</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения-выбор-из-нескольких-моделей"><i class="fa fa-check"></i><b>5.5.1</b> Байесовский апдейт нормального распределения: выбор из нескольких моделей</a></li>
+<li class="chapter" data-level="5.5.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения-непрерывный-вариант"><i class="fa fa-check"></i><b>5.5.2</b> Байесовский апдейт нормального распределения: непрерывный вариант</a></li>
+<li class="chapter" data-level="5.5.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#что-почитать-1"><i class="fa fa-check"></i><b>5.5.3</b> Что почитать?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#другие-распределения"><i class="fa fa-check"></i><b>5.6</b> Другие распределения</a></li>
+<li class="chapter" data-level="5.7" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#вопросы-к-апостериорному-распределению"><i class="fa fa-check"></i><b>5.7</b> Вопросы к апостериорному распределению</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html"><i class="fa fa-check"></i><b>6</b> Байесовский доверительный интервал</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html#фреквентисткий-доверительный-интервал"><i class="fa fa-check"></i><b>6.1</b> Фреквентисткий доверительный интервал</a></li>
+<li class="chapter" data-level="6.2" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html#байесовский-доверительный-интервал-1"><i class="fa fa-check"></i><b>6.2</b> Байесовский доверительный интервал</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html"><i class="fa fa-check"></i><b>7</b> Коэффициент Байеса</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#формула-байеса-опять"><i class="fa fa-check"></i><b>7.1</b> Формула Байеса опять</a></li>
+<li class="chapter" data-level="7.2" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#категориальные-данные"><i class="fa fa-check"></i><b>7.2</b> Категориальные данные</a></li>
+<li class="chapter" data-level="7.3" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#интерпретация-коэфициента-байеса"><i class="fa fa-check"></i><b>7.3</b> Интерпретация коэфициента Байеса</a></li>
+<li class="chapter" data-level="7.4" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#биномиальные-данные-1"><i class="fa fa-check"></i><b>7.4</b> Биномиальные данные</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="эмпирическая-байесовская-оценка.html"><a href="эмпирическая-байесовская-оценка.html"><i class="fa fa-check"></i><b>8</b> Эмпирическая байесовская оценка</a></li>
+<li class="chapter" data-level="9" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html"><i class="fa fa-check"></i><b>9</b> Введение в Марковские цепи Монте-Карло</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#марковские-цепи"><i class="fa fa-check"></i><b>9.1</b> Марковские цепи</a></li>
+<li class="chapter" data-level="9.2" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#хакерская-статистика-основано-на-статистика-для-хакеров-джейка-вандерпласа"><i class="fa fa-check"></i><b>9.2</b> Хакерская статистика (основано на “Статистика для хакеров” Джейка Вандерпласа)</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#биномиальные-данные-2"><i class="fa fa-check"></i><b>9.2.1</b> Биномиальные данные</a></li>
+<li class="chapter" data-level="9.2.2" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#метод-монте-карло"><i class="fa fa-check"></i><b>9.2.2</b> Метод Монте-Карло</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#соединение-идей-марковских-цепей-и-монте-карло"><i class="fa fa-check"></i><b>9.3</b> Соединение идей Марковских цепей и Монте-Карло</a></li>
+<li class="chapter" data-level="9.4" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#brms"><i class="fa fa-check"></i><b>9.4</b> <code>brms</code></a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#регрессионный-пример"><i class="fa fa-check"></i><b>9.4.1</b> Регрессионный пример</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html"><i class="fa fa-check"></i><b>10</b> Ограничения на применение регрессии</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#основы-регрессионного-анализа"><i class="fa fa-check"></i><b>10.1</b> Основы регрессионного анализа</a></li>
+<li class="chapter" data-level="10.2" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#нелинейность-взаимосвязи"><i class="fa fa-check"></i><b>10.2</b> Нелинейность взаимосвязи</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#логарифмирование"><i class="fa fa-check"></i><b>10.2.1</b> Логарифмирование</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#нормальность-распределение-остатков"><i class="fa fa-check"></i><b>10.3</b> Нормальность распределение остатков</a></li>
+<li class="chapter" data-level="10.4" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#гетероскидастичность"><i class="fa fa-check"></i><b>10.4</b> Гетероскидастичность</a></li>
+<li class="chapter" data-level="10.5" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#мультиколлинеарность"><i class="fa fa-check"></i><b>10.5</b> Мультиколлинеарность</a></li>
+<li class="chapter" data-level="10.6" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#независимость-наблюдений"><i class="fa fa-check"></i><b>10.6</b> Независимость наблюдений</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#линейная-модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>10.6.1</b> Линейная модель со смешанными эффектами</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html"><i class="fa fa-check"></i><b>11</b> Байесовский регрессионный анализ</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#основы-регрессионного-анализа-1"><i class="fa fa-check"></i><b>11.1</b> Основы регрессионного анализа</a></li>
+<li class="chapter" data-level="11.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#brms-1"><i class="fa fa-check"></i><b>11.2</b> <code>brms</code></a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.1</b> Модель только со свободным членом</a></li>
+<li class="chapter" data-level="11.2.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.2</b> Модель только с угловым коэффициентом</a></li>
+<li class="chapter" data-level="11.2.3" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.3</b> Модель с угловым коэффициентом и свободным членом</a></li>
+<li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.4</b> Модель со смешанными эффектами</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Анализ данных для лингвистов</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="байесовский-регрессионный-анализ" class="section level1 hasAnchor" number="11">
+<h1><span class="header-section-number">11</span> Байесовский регрессионный анализ<a href="байесовский-регрессионный-анализ.html#байесовский-регрессионный-анализ" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="байесовский-регрессионный-анализ.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="основы-регрессионного-анализа-1" class="section level2 hasAnchor" number="11.1">
+<h2><span class="header-section-number">11.1</span> Основы регрессионного анализа<a href="байесовский-регрессионный-анализ.html#основы-регрессионного-анализа-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><img src="da4l_files/figure-html/unnamed-chunk-177-1.png" width="672" /></p>
+<p>Когда мы используем регрессионный анализ, мы пытаемся оценить два параметра:</p>
+<ul>
+<li>свободный член (intercept) – значение <span class="math inline">\(y\)</span> при <span class="math inline">\(x = 0\)</span>;</li>
+<li>угловой коэффициент (slope) – изменение <span class="math inline">\(y\)</span> при изменении <span class="math inline">\(x\)</span> на одну единицу.</li>
+</ul>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1\times x_i + \epsilon_i\]</span></p>
+<p>Причем, иногда мы можем один или другой параметр считать равным нулю.</p>
+<p>При этом, вне зависимости от статистической школы, у регрессии есть свои ограничения на применение:</p>
+<ul>
+<li>линейность связи между <span class="math inline">\(x\)</span> и <span class="math inline">\(y\)</span>;</li>
+<li>нормальность распределение остатков <span class="math inline">\(\epsilon_i\)</span>;</li>
+<li>гомоскидастичность — равномерность распределения остатков на всем протяжении <span class="math inline">\(x\)</span>;</li>
+<li>независимость переменных;</li>
+<li>независимость наблюдений друг от друга.</li>
+</ul>
+</div>
+<div id="brms-1" class="section level2 hasAnchor" number="11.2">
+<h2><span class="header-section-number">11.2</span> <code>brms</code><a href="байесовский-регрессионный-анализ.html#brms-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Для анализа возьмем датасет, который я составил из UD-корпусов и попробуем смоделировать связь между количеством слов в тексте и количеством уникальных слов (<a href="https://en.wikipedia.org/wiki/Heaps%27_law">закон Хердана-Хипса</a>).</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="байесовский-регрессионный-анализ.html#cb201-1" aria-hidden="true" tabindex="-1"></a>ud <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/agricolamz/udpipe_count_n_words_and_tokens/master/filtered_dataset.csv&quot;</span>)</span>
+<span id="cb201-2"><a href="байесовский-регрессионный-анализ.html#cb201-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(ud)</span></code></pre></div>
+<pre><code>Rows: 20,705
+Columns: 5
+$ doc_id      &lt;chr&gt; &quot;KR1d0052_001&quot;, &quot;KR1d0052_002&quot;, &quot;KR1d0052_003&quot;, &quot;KR1d0052_…
+$ n_words     &lt;dbl&gt; 3516, 2131, 4927, 4884, 4245, 5027, 3406, 2202, 2673, 2300…
+$ n_tokens    &lt;dbl&gt; 842, 546, 869, 883, 737, 1085, 494, 443, 573, 578, 660, 87…
+$ language    &lt;chr&gt; &quot;Classical_Chinese&quot;, &quot;Classical_Chinese&quot;, &quot;Classical_Chine…
+$ corpus_code &lt;chr&gt; &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyo…</code></pre>
+<p>Для начала, нарушим кучу ограничений на применение регрессии и смоделируем модель для вот таких вот данных, взяв только тексты меньше 1500 слов:</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="байесовский-регрессионный-анализ.html#cb203-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span></span>
+<span id="cb203-2"><a href="байесовский-регрессионный-анализ.html#cb203-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_words <span class="sc">&lt;</span> <span class="dv">1500</span>) <span class="ot">-&gt;</span></span>
+<span id="cb203-3"><a href="байесовский-регрессионный-анализ.html#cb203-3" aria-hidden="true" tabindex="-1"></a>  ud</span>
+<span id="cb203-4"><a href="байесовский-регрессионный-анализ.html#cb203-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb203-5"><a href="байесовский-регрессионный-анализ.html#cb203-5" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb203-6"><a href="байесовский-регрессионный-анализ.html#cb203-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb203-7"><a href="байесовский-регрессионный-анализ.html#cb203-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-179-1.png" width="672" /></p>
+<div id="модель-только-со-свободным-членом" class="section level3 hasAnchor" number="11.2.1">
+<h3><span class="header-section-number">11.2.1</span> Модель только со свободным членом<a href="байесовский-регрессионный-анализ.html#модель-только-со-свободным-членом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="байесовский-регрессионный-анализ.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb204-2"><a href="байесовский-регрессионный-анализ.html#cb204-2" aria-hidden="true" tabindex="-1"></a>parallel<span class="sc">::</span><span class="fu">detectCores</span>()</span></code></pre></div>
+<pre><code>[1] 16</code></pre>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="байесовский-регрессионный-анализ.html#cb206-1" aria-hidden="true" tabindex="-1"></a>n_cores <span class="ot">&lt;-</span> <span class="dv">7</span> <span class="co"># parallel::detectCores() - 1</span></span>
+<span id="cb206-2"><a href="байесовский-регрессионный-анализ.html#cb206-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb206-3"><a href="байесовский-регрессионный-анализ.html#cb206-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb206-4"><a href="байесовский-регрессионный-анализ.html#cb206-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"student_t(3, 104, 115.6)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Вот модель с встроенными априорными распределениями:</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="байесовский-регрессионный-анализ.html#cb207-1" aria-hidden="true" tabindex="-1"></a>fit_intercept <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb207-2"><a href="байесовский-регрессионный-анализ.html#cb207-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> ud,</span>
+<span id="cb207-3"><a href="байесовский-регрессионный-анализ.html#cb207-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
+gcc -std=gnu99 -std=gnu11 -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-i2PIHO/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c foo.c -o foo.o
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:88,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+  628 | namespace Eigen {
+      | ^~~~~~~~~
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+  628 | namespace Eigen {
+      |                 ^
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+   96 | #include &lt;complex&gt;
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [/usr/lib/R/etc/Makeconf:168: foo.o] Error 1</code></pre>
+<p>При желании встроенные априорные расспеределения можно не использовать и вставлять в аргумент <code>prior</code> априорные распределения по вашему желанию.</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="байесовский-регрессионный-анализ.html#cb209-1" aria-hidden="true" tabindex="-1"></a>fit_intercept</span></code></pre></div>
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: n_tokens ~ 1 
+   Data: ud (Number of observations: 20282) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Population-Level Effects: 
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept   135.65      0.85   134.00   137.30 1.00     2734     2548
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma   121.75      0.60   120.58   122.93 1.00     3767     2604
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="байесовский-регрессионный-анализ.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_intercept)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-181-1.png" width="672" /></p>
+<p>Взято <a href="https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup">остюда</a>:</p>
+<div id="r-hat" class="section level4 hasAnchor" number="11.2.1.1">
+<h4><span class="header-section-number">11.2.1.1</span> R-hat<a href="байесовский-регрессионный-анализ.html#r-hat" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>R-hat convergence diagnostic compares the between- and within-chain estimates for model parameters and other univariate quantities of interest. If chains have not mixed well (ie, the between- and within-chain estimates don’t agree), R-hat is larger than 1. We recommend running at least four chains by default and only using the sample if R-hat is less than 1.01. Stan reports R-hat which is the maximum of rank normalized split-R-hat and rank normalized folded-split-R-hat, which works for thick tailed distributions and is sensitive also to differences in scale. For more details on this diagnostic, see <a href="https://arxiv.org/abs/1903.08008" class="uri">https://arxiv.org/abs/1903.08008</a>.</p>
+<p>Recommendations:</p>
+<ul>
+<li>Look at Bulk- and Tail-ESS for further information.</li>
+<li>Look at the rank plot to see how the chains differ from each other.</li>
+<li>Look at the local and quantile efficiency plots.</li>
+<li>You might try setting a higher value for the iter argument. By default iter is 2000</li>
+</ul>
+</div>
+<div id="bulk-ess" class="section level4 hasAnchor" number="11.2.1.2">
+<h4><span class="header-section-number">11.2.1.2</span> Bulk ESS<a href="байесовский-регрессионный-анализ.html#bulk-ess" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Roughly speaking, the effective sample size (ESS) of a quantity of interest captures how many independent draws contain the same amount of information as the dependent sample obtained by the MCMC algorithm. Clearly, the higher the ESS the better. Stan uses R-hat adjustment to use the between-chain information in computing the ESS. For example, in case of multimodal distributions with well-separated modes, this leads to an ESS estimate that is close to the number of distinct modes that are found.</p>
+<p>Bulk-ESS refers to the effective sample size based on the rank normalized draws. This does not directly compute the ESS relevant for computing the mean of the parameter, but instead computes a quantity that is well defined even if the chains do not have finite mean or variance. Overall bulk-ESS estimates the sampling efficiency for the location of the distribution (e.g. mean and median).</p>
+<p>Often quite smaller ESS would be sufficient for the desired estimation accuracy, but the estimation of ESS and convergence diagnostics themselves require higher ESS. We recommend requiring that the bulk-ESS is greater than 100 times the number of chains. For example, when running four chains, this corresponds to having a rank-normalized effective sample size of at least 400.</p>
+<p>Recommendations:</p>
+<ul>
+<li>You might try setting a higher value for the iter argument. By default iter is 2000</li>
+<li>Look at the rank plot to see how the chains differ from each other.</li>
+<li>Look at the local and quantile efficiency plots.</li>
+<li>Look at change in bulk-ESS when the number of iterations increase. If R-hat is less than 1.01 and bulk-ESS grows linearly with the number of iterations and eventually exceeds the recommended limit, the mixing is sufficient but MCMC has high autocorrelation requiring a large number of iterations</li>
+</ul>
+</div>
+<div id="tail-ess" class="section level4 hasAnchor" number="11.2.1.3">
+<h4><span class="header-section-number">11.2.1.3</span> Tail ESS<a href="байесовский-регрессионный-анализ.html#tail-ess" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Tail-ESS computes the minimum of the effective sample sizes (ESS) of the 5% and 95% quantiles. Tail-ESS can help diagnosing problems due to different scales of the chains and slow mixing in the tails. See also general information about ESS above in description of bulk-ESS.</p>
+<p>Recommendations:</p>
+<ul>
+<li>You might try setting a higher value for the iter argument. By default iter is 2000</li>
+<li>Look at the rank plot to see how the chains differ from each other.</li>
+<li>Look at the local and quantile efficiency plots.</li>
+<li>Look at change in tail-ESS when the number of iterations increase. If R-hat is less than 1.01 and tail-ESS grows linearly with the number of iterations and eventually exceeds the recommended limit, the mixing is sufficient but MCMC has high autocorrelation requiring a large number of iterations</li>
+</ul>
+</div>
+<div id="вернемся-к-нашим-баранам" class="section level4 hasAnchor" number="11.2.1.4">
+<h4><span class="header-section-number">11.2.1.4</span> Вернемся к нашим баранам<a href="байесовский-регрессионный-анализ.html#вернемся-к-нашим-баранам" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>Давайте посмотрим на наши данные:</p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-182-1.png" width="672" /></p>
+<p><a href="https://cs.pikabu.ru/post_img/2013/05/08/10/1368028088_2034545627.jpg">Оригинал мема</a>. Вот <a href="https://demotions.ru/38886--nu-dopustim-myau.html">еще один</a>.</p>
+</div>
+</div>
+<div id="модель-только-с-угловым-коэффициентом" class="section level3 hasAnchor" number="11.2.2">
+<h3><span class="header-section-number">11.2.2</span> Модель только с угловым коэффициентом<a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="байесовский-регрессионный-анализ.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span><span class="dv">0</span>,</span>
+<span id="cb212-2"><a href="байесовский-регрессионный-анализ.html#cb212-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"n_words","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="байесовский-регрессионный-анализ.html#cb213-1" aria-hidden="true" tabindex="-1"></a>fit_slope <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span><span class="dv">0</span>, </span>
+<span id="cb213-2"><a href="байесовский-регрессионный-анализ.html#cb213-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> ud,</span>
+<span id="cb213-3"><a href="байесовский-регрессионный-анализ.html#cb213-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
+gcc -std=gnu99 -std=gnu11 -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-i2PIHO/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c foo.c -o foo.o
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:88,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+  628 | namespace Eigen {
+      | ^~~~~~~~~
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+  628 | namespace Eigen {
+      |                 ^
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+   96 | #include &lt;complex&gt;
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [/usr/lib/R/etc/Makeconf:168: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="байесовский-регрессионный-анализ.html#cb215-1" aria-hidden="true" tabindex="-1"></a>fit_slope</span></code></pre></div>
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: n_tokens ~ n_words + 0 
+   Data: ud (Number of observations: 20282) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Population-Level Effects: 
+        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+n_words     0.53      0.00     0.53     0.53 1.00     4360     3010
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma    42.79      0.21    42.40    43.20 1.01     1180     1357
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="байесовский-регрессионный-анализ.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_slope)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-184-1.png" width="672" /></p>
+<p>Давайте совместим предсказания модели и наши наблюдения.</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="байесовский-регрессионный-анализ.html#cb218-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb218-2"><a href="байесовский-регрессионный-анализ.html#cb218-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb218-3"><a href="байесовский-регрессионный-анализ.html#cb218-3" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb218-4"><a href="байесовский-регрессионный-анализ.html#cb218-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_slope, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb218-5"><a href="байесовский-регрессионный-анализ.html#cb218-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb218-6"><a href="байесовский-регрессионный-анализ.html#cb218-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb218-7"><a href="байесовский-регрессионный-анализ.html#cb218-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-185-1.png" width="672" /></p>
+</div>
+<div id="модель-с-угловым-коэффициентом-и-свободным-членом" class="section level3 hasAnchor" number="11.2.3">
+<h3><span class="header-section-number">11.2.3</span> Модель с угловым коэффициентом и свободным членом<a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="байесовский-регрессионный-анализ.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words,</span>
+<span id="cb219-2"><a href="байесовский-регрессионный-анализ.html#cb219-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"n_words","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 104, 115.6)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="байесовский-регрессионный-анализ.html#cb220-1" aria-hidden="true" tabindex="-1"></a>fit_slope_intercept <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words,</span>
+<span id="cb220-2"><a href="байесовский-регрессионный-анализ.html#cb220-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">data =</span> ud,</span>
+<span id="cb220-3"><a href="байесовский-регрессионный-анализ.html#cb220-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
+gcc -std=gnu99 -std=gnu11 -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-i2PIHO/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c foo.c -o foo.o
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:88,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+  628 | namespace Eigen {
+      | ^~~~~~~~~
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+  628 | namespace Eigen {
+      |                 ^
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+   96 | #include &lt;complex&gt;
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [/usr/lib/R/etc/Makeconf:168: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="байесовский-регрессионный-анализ.html#cb222-1" aria-hidden="true" tabindex="-1"></a>fit_slope_intercept</span></code></pre></div>
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: n_tokens ~ n_words 
+   Data: ud (Number of observations: 20282) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Population-Level Effects: 
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept    24.31      0.37    23.60    25.03 1.00     2919     2740
+n_words       0.48      0.00     0.48     0.48 1.00     4859     2569
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma    39.05      0.19    38.67    39.44 1.00     2290     2065
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="байесовский-регрессионный-анализ.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_slope_intercept)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-187-1.png" width="672" /></p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="байесовский-регрессионный-анализ.html#cb225-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb225-2"><a href="байесовский-регрессионный-анализ.html#cb225-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_slope_intercept, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb225-3"><a href="байесовский-регрессионный-анализ.html#cb225-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb225-4"><a href="байесовский-регрессионный-анализ.html#cb225-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb225-5"><a href="байесовский-регрессионный-анализ.html#cb225-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-187-2.png" width="672" /></p>
+</div>
+<div id="модель-со-смешанными-эффектами" class="section level3 hasAnchor" number="11.2.4">
+<h3><span class="header-section-number">11.2.4</span> Модель со смешанными эффектами<a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>В данных есть группировка по языкам, которую мы все это время игнорировали. Давайте сделаем модель со смешанными эффектами:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="байесовский-регрессионный-анализ.html#cb226-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>language),</span>
+<span id="cb226-2"><a href="байесовский-регрессионный-анализ.html#cb226-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"n_words","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 104, 115.6)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sd","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"},{"1":"","2":"sd","3":"","4":"language","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"sd","3":"Intercept","4":"language","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="байесовский-регрессионный-анализ.html#cb227-1" aria-hidden="true" tabindex="-1"></a>fit_mixed <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>language),</span>
+<span id="cb227-2"><a href="байесовский-регрессионный-анализ.html#cb227-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> ud,</span>
+<span id="cb227-3"><a href="байесовский-регрессионный-анализ.html#cb227-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
+gcc -std=gnu99 -std=gnu11 -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-i2PIHO/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c foo.c -o foo.o
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:88,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+  628 | namespace Eigen {
+      | ^~~~~~~~~
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+  628 | namespace Eigen {
+      |                 ^
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+   96 | #include &lt;complex&gt;
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [/usr/lib/R/etc/Makeconf:168: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="байесовский-регрессионный-анализ.html#cb229-1" aria-hidden="true" tabindex="-1"></a>fit_mixed</span></code></pre></div>
+<pre><code> Family: gaussian 
+  Links: mu = identity; sigma = identity 
+Formula: n_tokens ~ n_words + (1 | language) 
+   Data: ud (Number of observations: 20282) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Group-Level Effects: 
+~language (Number of levels: 9) 
+              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sd(Intercept)    64.03     18.87    38.13   111.85 1.01      558     1054
+
+Population-Level Effects: 
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept     5.91     20.69   -36.51    46.11 1.00      642      824
+n_words       0.49      0.00     0.49     0.49 1.00     4075     2333
+
+Family Specific Parameters: 
+      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+sigma    29.28      0.14    29.01    29.55 1.00     2316     1988
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="байесовский-регрессионный-анализ.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_mixed)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-189-1.png" width="672" /></p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="байесовский-регрессионный-анализ.html#cb232-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb232-2"><a href="байесовский-регрессионный-анализ.html#cb232-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_mixed, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb232-3"><a href="байесовский-регрессионный-анализ.html#cb232-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb232-4"><a href="байесовский-регрессионный-анализ.html#cb232-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb232-5"><a href="байесовский-регрессионный-анализ.html#cb232-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb232-6"><a href="байесовский-регрессионный-анализ.html#cb232-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>language)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-189-2.png" width="672" /></p>
+<p>То, что получилось учитывает общий эффект всех языков: посмотрите на каталанский. Если построить модель по каждому языку, то получится совсем другая картина:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="байесовский-регрессионный-анализ.html#cb233-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb233-2"><a href="байесовский-регрессионный-анализ.html#cb233-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb233-3"><a href="байесовский-регрессионный-анализ.html#cb233-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb233-4"><a href="байесовский-регрессионный-анализ.html#cb233-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>)<span class="sc">+</span></span>
+<span id="cb233-5"><a href="байесовский-регрессионный-анализ.html#cb233-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>language)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-190-1.png" width="672" /></p>
+<div class="rmdtask">
+<p>
+В работе <span class="citation"><span class="citation">(<a href="#ref-coretta2016" role="doc-biblioref">Coretta 2016</a>)</span></span> собраны <a
+href="https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv">данные</a>
+длительности исландских гласных. Используя байесовскую регрессию,
+смоделируйте длительность гласного (<code>vowel.dur</code>) в
+зависимости от аспирированности (<code>aspiration</code>) учитывая
+эффект носителя. Визуализируйте результаты модели
+</p>
+</div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-194-1.png" width="672" /></p>
+
+</div>
+</div>
+</div>
+<h3>Ссылки на литературу<a href="ссылки-на-литературу.html#ссылки-на-литературу" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-coretta2016" class="csl-entry">
+Coretta, Stefano. 2016. <span>“Vowel Duration and Aspiration Effects in Icelandic.”</span> University of York.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="ограничения-на-применение-регрессии.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ссылки-на-литературу.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/agricolamz/2022_da4l/edit/master/10-inroduction_to_bayesian_regression_with_brms.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["da4l.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"self_contained": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
