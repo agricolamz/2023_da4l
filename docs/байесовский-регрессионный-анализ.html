@@ -53,10 +53,6 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
-<script src="libs/viz-1.8.2/viz.js"></script>
-<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
-<script src="libs/grViz-binding-1.0.9/grViz.js"></script>
 
 
 <style type="text/css">
@@ -306,10 +302,10 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="байесовский-регрессионный-анализ" class="section level1 hasAnchor" number="11">
 <h1><span class="header-section-number">11</span> Байесовский регрессионный анализ<a href="байесовский-регрессионный-анализ.html#байесовский-регрессионный-анализ" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="байесовский-регрессионный-анализ.html#cb244-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="байесовский-регрессионный-анализ.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <div id="основы-регрессионного-анализа-1" class="section level2 hasAnchor" number="11.1">
 <h2><span class="header-section-number">11.1</span> Основы регрессионного анализа<a href="байесовский-регрессионный-анализ.html#основы-регрессионного-анализа-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><img src="da4l_files/figure-html/unnamed-chunk-211-1.png" width="672" /></p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Когда мы используем регрессионный анализ, мы пытаемся оценить два параметра:</p>
 <ul>
 <li>свободный член (intercept) – значение <span class="math inline">\(y\)</span> при <span class="math inline">\(x = 0\)</span>;</li>
@@ -329,110 +325,110 @@ div.csl-indent {
 <div id="brms-1" class="section level2 hasAnchor" number="11.2">
 <h2><span class="header-section-number">11.2</span> <code>brms</code><a href="байесовский-регрессионный-анализ.html#brms-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Для анализа возьмем датасет, который я составил из UD-корпусов и попробуем смоделировать связь между количеством слов в тексте и количеством уникальных слов (<a href="https://en.wikipedia.org/wiki/Heaps%27_law">закон Хердана-Хипса</a>).</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="байесовский-регрессионный-анализ.html#cb245-1" aria-hidden="true" tabindex="-1"></a>ud <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/agricolamz/udpipe_count_n_words_and_tokens/master/filtered_dataset.csv&quot;</span>)</span>
-<span id="cb245-2"><a href="байесовский-регрессионный-анализ.html#cb245-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(ud)</span></code></pre></div>
-<pre><code>Rows: 20,705
-Columns: 5
-$ doc_id      &lt;chr&gt; &quot;KR1d0052_001&quot;, &quot;KR1d0052_002&quot;, &quot;KR1d0052_003&quot;, &quot;KR1d0052_…
-$ n_words     &lt;dbl&gt; 3516, 2131, 4927, 4884, 4245, 5027, 3406, 2202, 2673, 2300…
-$ n_tokens    &lt;dbl&gt; 842, 546, 869, 883, 737, 1085, 494, 443, 573, 578, 660, 87…
-$ language    &lt;chr&gt; &quot;Classical_Chinese&quot;, &quot;Classical_Chinese&quot;, &quot;Classical_Chine…
-$ corpus_code &lt;chr&gt; &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyo…</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="байесовский-регрессионный-анализ.html#cb2-1" aria-hidden="true" tabindex="-1"></a>ud <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/agricolamz/udpipe_count_n_words_and_tokens/master/filtered_dataset.csv&quot;</span>)</span>
+<span id="cb2-2"><a href="байесовский-регрессионный-анализ.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(ud)</span></code></pre></div>
+<pre><code>## Rows: 20,705
+## Columns: 5
+## $ doc_id      &lt;chr&gt; &quot;KR1d0052_001&quot;, &quot;KR1d0052_002&quot;, &quot;KR1d0052_003&quot;, &quot;KR1d0052_…
+## $ n_words     &lt;dbl&gt; 3516, 2131, 4927, 4884, 4245, 5027, 3406, 2202, 2673, 2300…
+## $ n_tokens    &lt;dbl&gt; 842, 546, 869, 883, 737, 1085, 494, 443, 573, 578, 660, 87…
+## $ language    &lt;chr&gt; &quot;Classical_Chinese&quot;, &quot;Classical_Chinese&quot;, &quot;Classical_Chine…
+## $ corpus_code &lt;chr&gt; &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyoto&quot;, &quot;Kyo…</code></pre>
 <p>Для начала, нарушим кучу ограничений на применение регрессии и смоделируем модель для вот таких вот данных, взяв только тексты меньше 1500 слов:</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="байесовский-регрессионный-анализ.html#cb247-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span></span>
-<span id="cb247-2"><a href="байесовский-регрессионный-анализ.html#cb247-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_words <span class="sc">&lt;</span> <span class="dv">1500</span>) <span class="ot">-&gt;</span></span>
-<span id="cb247-3"><a href="байесовский-регрессионный-анализ.html#cb247-3" aria-hidden="true" tabindex="-1"></a>  ud</span>
-<span id="cb247-4"><a href="байесовский-регрессионный-анализ.html#cb247-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb247-5"><a href="байесовский-регрессионный-анализ.html#cb247-5" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
-<span id="cb247-6"><a href="байесовский-регрессионный-анализ.html#cb247-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
-<span id="cb247-7"><a href="байесовский-регрессионный-анализ.html#cb247-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-213-1.png" width="672" /></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="байесовский-регрессионный-анализ.html#cb4-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="байесовский-регрессионный-анализ.html#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_words <span class="sc">&lt;</span> <span class="dv">1500</span>) <span class="ot">-&gt;</span></span>
+<span id="cb4-3"><a href="байесовский-регрессионный-анализ.html#cb4-3" aria-hidden="true" tabindex="-1"></a>  ud</span>
+<span id="cb4-4"><a href="байесовский-регрессионный-анализ.html#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="байесовский-регрессионный-анализ.html#cb4-5" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="байесовский-регрессионный-анализ.html#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb4-7"><a href="байесовский-регрессионный-анализ.html#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <div id="модель-только-со-свободным-членом" class="section level3 hasAnchor" number="11.2.1">
 <h3><span class="header-section-number">11.2.1</span> Модель только со свободным членом<a href="байесовский-регрессионный-анализ.html#модель-только-со-свободным-членом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="байесовский-регрессионный-анализ.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
-<span id="cb248-2"><a href="байесовский-регрессионный-анализ.html#cb248-2" aria-hidden="true" tabindex="-1"></a>parallel<span class="sc">::</span><span class="fu">detectCores</span>()</span></code></pre></div>
-<pre><code>[1] 16</code></pre>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="байесовский-регрессионный-анализ.html#cb250-1" aria-hidden="true" tabindex="-1"></a>n_cores <span class="ot">&lt;-</span> <span class="dv">15</span> <span class="co"># parallel::detectCores() - 1</span></span>
-<span id="cb250-2"><a href="байесовский-регрессионный-анализ.html#cb250-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb250-3"><a href="байесовский-регрессионный-анализ.html#cb250-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb250-4"><a href="байесовский-регрессионный-анализ.html#cb250-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="байесовский-регрессионный-анализ.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb5-2"><a href="байесовский-регрессионный-анализ.html#cb5-2" aria-hidden="true" tabindex="-1"></a>parallel<span class="sc">::</span><span class="fu">detectCores</span>()</span></code></pre></div>
+<pre><code>## [1] 16</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="байесовский-регрессионный-анализ.html#cb7-1" aria-hidden="true" tabindex="-1"></a>n_cores <span class="ot">&lt;-</span> <span class="dv">15</span> <span class="co"># parallel::detectCores() - 1</span></span>
+<span id="cb7-2"><a href="байесовский-регрессионный-анализ.html#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="байесовский-регрессионный-анализ.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb7-4"><a href="байесовский-регрессионный-анализ.html#cb7-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"student_t(3, 104, 115.6)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Вот модель с встроенными априорными распределениями:</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="байесовский-регрессионный-анализ.html#cb251-1" aria-hidden="true" tabindex="-1"></a>fit_intercept <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> <span class="dv">1</span>, </span>
-<span id="cb251-2"><a href="байесовский-регрессионный-анализ.html#cb251-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> ud,</span>
-<span id="cb251-3"><a href="байесовский-регрессионный-анализ.html#cb251-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cores =</span> n_cores, </span>
-<span id="cb251-4"><a href="байесовский-регрессионный-анализ.html#cb251-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">refresh =</span> <span class="dv">0</span>, </span>
-<span id="cb251-5"><a href="байесовский-регрессионный-анализ.html#cb251-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
-gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
-  628 | namespace Eigen {
-      | ^~~~~~~~~
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  628 | namespace Eigen {
-      |                 ^
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
-   96 | #include &lt;complex&gt;
-      |          ^~~~~~~~~
-compilation terminated.
-make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="байесовский-регрессионный-анализ.html#cb8-1" aria-hidden="true" tabindex="-1"></a>fit_intercept <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb8-2"><a href="байесовский-регрессионный-анализ.html#cb8-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">data =</span> ud,</span>
+<span id="cb8-3"><a href="байесовский-регрессионный-анализ.html#cb8-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">cores =</span> n_cores, </span>
+<span id="cb8-4"><a href="байесовский-регрессионный-анализ.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                     <span class="at">refresh =</span> <span class="dv">0</span>, </span>
+<span id="cb8-5"><a href="байесовский-регрессионный-анализ.html#cb8-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Running /usr/lib/R/bin/R CMD SHLIB foo.c
+## gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+##   628 | namespace Eigen {
+##       | ^~~~~~~~~
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+##   628 | namespace Eigen {
+##       |                 ^
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+##    96 | #include &lt;complex&gt;
+##       |          ^~~~~~~~~
+## compilation terminated.
+## make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
 <p>При желании встроенные априорные расспеределения можно не использовать и вставлять в аргумент <code>prior</code> априорные распределения по вашему желанию.</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="байесовский-регрессионный-анализ.html#cb253-1" aria-hidden="true" tabindex="-1"></a>fit_intercept</span></code></pre></div>
-<pre><code> Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: n_tokens ~ 1 
-   Data: ud (Number of observations: 20282) 
-  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup draws = 4000
-
-Population-Level Effects: 
-          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept   135.63      0.86   133.97   137.34 1.00     2730     2345
-
-Family Specific Parameters: 
-      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma   121.76      0.59   120.61   122.97 1.00     3872     2689
-
-Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
-and Tail_ESS are effective sample size measures, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="байесовский-регрессионный-анализ.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_intercept)</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-215-1.png" width="672" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="байесовский-регрессионный-анализ.html#cb10-1" aria-hidden="true" tabindex="-1"></a>fit_intercept</span></code></pre></div>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: n_tokens ~ 1 
+##    Data: ud (Number of observations: 20282) 
+##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup draws = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept   135.66      0.86   133.90   137.31 1.00     3099     2526
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma   121.76      0.61   120.58   122.94 1.00     4207     2513
+## 
+## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="байесовский-регрессионный-анализ.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_intercept)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="проверка-сходимости-модели" class="section level3 hasAnchor" number="11.2.2">
 <h3><span class="header-section-number">11.2.2</span> Проверка сходимости модели<a href="байесовский-регрессионный-анализ.html#проверка-сходимости-модели" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Вы пострили регрессию, и самый простой способ проверить сходимость это визуально посмотреть на цепи:</p>
-<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
-gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
-  628 | namespace Eigen {
-      | ^~~~~~~~~
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  628 | namespace Eigen {
-      |                 ^
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
-   96 | #include &lt;complex&gt;
-      |          ^~~~~~~~~
-compilation terminated.
-make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<pre><code>## Running /usr/lib/R/bin/R CMD SHLIB foo.c
+## gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+##   628 | namespace Eigen {
+##       | ^~~~~~~~~
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+##   628 | namespace Eigen {
+##       |                 ^
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+##    96 | #include &lt;complex&gt;
+##       |          ^~~~~~~~~
+## compilation terminated.
+## make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
 <p><img src="da4l_files/figure-html/convergence-1.png" width="672" /></p>
 <p>Дальнейший фрагемнт взят из <a href="https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup">документации Stan</a> (Stan — это один из популярнейших сэмплеров для MCMC и многого другого, который используется в <code>brms</code>).</p>
 <div id="r-hat" class="section level4 hasAnchor" number="11.2.2.1">
@@ -459,209 +455,218 @@ make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
 <div id="опять-модель-только-со-свободным-членом" class="section level3 hasAnchor" number="11.2.3">
 <h3><span class="header-section-number">11.2.3</span> Опять модель только со свободным членом<a href="байесовский-регрессионный-анализ.html#опять-модель-только-со-свободным-членом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Давайте посмотрим на наши данные:</p>
-<p><img src="da4l_files/figure-html/unnamed-chunk-216-1.png" width="672" /></p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p><a href="https://cs.pikabu.ru/post_img/2013/05/08/10/1368028088_2034545627.jpg">Если вам хочется вспомнить мем</a>. Вот <a href="https://demotions.ru/38886--nu-dopustim-myau.html">еще один</a>.</p>
 </div>
 <div id="модель-только-с-угловым-коэффициентом" class="section level3 hasAnchor" number="11.2.4">
 <h3><span class="header-section-number">11.2.4</span> Модель только с угловым коэффициентом<a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="байесовский-регрессионный-анализ.html#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span><span class="dv">0</span>,</span>
-<span id="cb257-2"><a href="байесовский-регрессионный-анализ.html#cb257-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="байесовский-регрессионный-анализ.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span><span class="dv">0</span>,</span>
+<span id="cb14-2"><a href="байесовский-регрессионный-анализ.html#cb14-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"n_words","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="байесовский-регрессионный-анализ.html#cb258-1" aria-hidden="true" tabindex="-1"></a>fit_slope <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span><span class="dv">0</span>, </span>
-<span id="cb258-2"><a href="байесовский-регрессионный-анализ.html#cb258-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> ud,</span>
-<span id="cb258-3"><a href="байесовский-регрессионный-анализ.html#cb258-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cores =</span> n_cores,</span>
-<span id="cb258-4"><a href="байесовский-регрессионный-анализ.html#cb258-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">refresh =</span> <span class="dv">0</span>,</span>
-<span id="cb258-5"><a href="байесовский-регрессионный-анализ.html#cb258-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
-gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
-  628 | namespace Eigen {
-      | ^~~~~~~~~
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  628 | namespace Eigen {
-      |                 ^
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
-   96 | #include &lt;complex&gt;
-      |          ^~~~~~~~~
-compilation terminated.
-make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="байесовский-регрессионный-анализ.html#cb260-1" aria-hidden="true" tabindex="-1"></a>fit_slope</span></code></pre></div>
-<pre><code> Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: n_tokens ~ n_words + 0 
-   Data: ud (Number of observations: 20282) 
-  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup draws = 4000
-
-Population-Level Effects: 
-        Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-n_words     0.53      0.00     0.53     0.53 1.00     4864     3178
-
-Family Specific Parameters: 
-      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma    42.79      0.21    42.38    43.21 1.00     1182     1410
-
-Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
-and Tail_ESS are effective sample size measures, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="байесовский-регрессионный-анализ.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_slope)</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-218-1.png" width="672" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="байесовский-регрессионный-анализ.html#cb15-1" aria-hidden="true" tabindex="-1"></a>fit_slope <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span><span class="dv">0</span>, </span>
+<span id="cb15-2"><a href="байесовский-регрессионный-анализ.html#cb15-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> ud,</span>
+<span id="cb15-3"><a href="байесовский-регрессионный-анализ.html#cb15-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cores =</span> n_cores,</span>
+<span id="cb15-4"><a href="байесовский-регрессионный-анализ.html#cb15-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">refresh =</span> <span class="dv">0</span>,</span>
+<span id="cb15-5"><a href="байесовский-регрессионный-анализ.html#cb15-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Running /usr/lib/R/bin/R CMD SHLIB foo.c
+## gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+##   628 | namespace Eigen {
+##       | ^~~~~~~~~
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+##   628 | namespace Eigen {
+##       |                 ^
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+##    96 | #include &lt;complex&gt;
+##       |          ^~~~~~~~~
+## compilation terminated.
+## make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="байесовский-регрессионный-анализ.html#cb17-1" aria-hidden="true" tabindex="-1"></a>fit_slope</span></code></pre></div>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: n_tokens ~ n_words + 0 
+##    Data: ud (Number of observations: 20282) 
+##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup draws = 4000
+## 
+## Population-Level Effects: 
+##         Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## n_words     0.53      0.00     0.53     0.53 1.00     4395     2159
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma    42.80      0.21    42.39    43.21 1.00     1011     1322
+## 
+## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="байесовский-регрессионный-анализ.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_slope)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Давайте посмотрим на предсказания модели в том, виде, в каком их может интерпретировать не специалист по байесовской статистике:</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="байесовский-регрессионный-анализ.html#cb263-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
-<span id="cb263-2"><a href="байесовский-регрессионный-анализ.html#cb263-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb263-3"><a href="байесовский-регрессионный-анализ.html#cb263-3" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
-<span id="cb263-4"><a href="байесовский-регрессионный-анализ.html#cb263-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_slope, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb263-5"><a href="байесовский-регрессионный-анализ.html#cb263-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
-<span id="cb263-6"><a href="байесовский-регрессионный-анализ.html#cb263-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
-<span id="cb263-7"><a href="байесовский-регрессионный-анализ.html#cb263-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-219-1.png" width="672" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="байесовский-регрессионный-анализ.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb20-2"><a href="байесовский-регрессионный-анализ.html#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="байесовский-регрессионный-анализ.html#cb20-3" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb20-4"><a href="байесовский-регрессионный-анализ.html#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_slope, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb20-5"><a href="байесовский-регрессионный-анализ.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb20-6"><a href="байесовский-регрессионный-анализ.html#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb20-7"><a href="байесовский-регрессионный-анализ.html#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 </div>
 <div id="модель-с-угловым-коэффициентом-и-свободным-членом" class="section level3 hasAnchor" number="11.2.5">
 <h3><span class="header-section-number">11.2.5</span> Модель с угловым коэффициентом и свободным членом<a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="байесовский-регрессионный-анализ.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words,</span>
-<span id="cb264-2"><a href="байесовский-регрессионный-анализ.html#cb264-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="байесовский-регрессионный-анализ.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words,</span>
+<span id="cb21-2"><a href="байесовский-регрессионный-анализ.html#cb21-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"n_words","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 104, 115.6)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="байесовский-регрессионный-анализ.html#cb265-1" aria-hidden="true" tabindex="-1"></a>fit_slope_intercept <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words,</span>
-<span id="cb265-2"><a href="байесовский-регрессионный-анализ.html#cb265-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">data =</span> ud,</span>
-<span id="cb265-3"><a href="байесовский-регрессионный-анализ.html#cb265-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
-gcc -std=gnu99 -std=gnu11 -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-i2PIHO/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c foo.c -o foo.o
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:88,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
-  628 | namespace Eigen {
-      | ^~~~~~~~~
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  628 | namespace Eigen {
-      |                 ^
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
-   96 | #include &lt;complex&gt;
-      |          ^~~~~~~~~
-compilation terminated.
-make: *** [/usr/lib/R/etc/Makeconf:168: foo.o] Error 1</code></pre>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="байесовский-регрессионный-анализ.html#cb267-1" aria-hidden="true" tabindex="-1"></a>fit_slope_intercept</span></code></pre></div>
-<pre><code> Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: n_tokens ~ n_words 
-   Data: ud (Number of observations: 20282) 
-  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup draws = 4000
-
-Population-Level Effects: 
-          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept    24.31      0.37    23.60    25.03 1.00     2919     2740
-n_words       0.48      0.00     0.48     0.48 1.00     4859     2569
-
-Family Specific Parameters: 
-      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma    39.05      0.19    38.67    39.44 1.00     2290     2065
-
-Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
-and Tail_ESS are effective sample size measures, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="байесовский-регрессионный-анализ.html#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_slope_intercept)</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-221-1.png" width="672" /></p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="байесовский-регрессионный-анализ.html#cb270-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
-<span id="cb270-2"><a href="байесовский-регрессионный-анализ.html#cb270-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_slope_intercept, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb270-3"><a href="байесовский-регрессионный-анализ.html#cb270-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
-<span id="cb270-4"><a href="байесовский-регрессионный-анализ.html#cb270-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
-<span id="cb270-5"><a href="байесовский-регрессионный-анализ.html#cb270-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-221-2.png" width="672" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="байесовский-регрессионный-анализ.html#cb22-1" aria-hidden="true" tabindex="-1"></a>fit_slope_intercept <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words,</span>
+<span id="cb22-2"><a href="байесовский-регрессионный-анализ.html#cb22-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">data =</span> ud,</span>
+<span id="cb22-3"><a href="байесовский-регрессионный-анализ.html#cb22-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Running /usr/lib/R/bin/R CMD SHLIB foo.c
+## gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+##   628 | namespace Eigen {
+##       | ^~~~~~~~~
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+##   628 | namespace Eigen {
+##       |                 ^
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+##    96 | #include &lt;complex&gt;
+##       |          ^~~~~~~~~
+## compilation terminated.
+## make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="байесовский-регрессионный-анализ.html#cb24-1" aria-hidden="true" tabindex="-1"></a>fit_slope_intercept</span></code></pre></div>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: n_tokens ~ n_words 
+##    Data: ud (Number of observations: 20282) 
+##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup draws = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    24.30      0.39    23.54    25.07 1.00     2445     2578
+## n_words       0.48      0.00     0.48     0.48 1.00     5420     2969
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma    39.06      0.19    38.69    39.42 1.00     2200     1983
+## 
+## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="байесовский-регрессионный-анализ.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_slope_intercept)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="байесовский-регрессионный-анализ.html#cb27-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href="байесовский-регрессионный-анализ.html#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_slope_intercept, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb27-3"><a href="байесовский-регрессионный-анализ.html#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb27-4"><a href="байесовский-регрессионный-анализ.html#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb27-5"><a href="байесовский-регрессионный-анализ.html#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) </span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
 </div>
 <div id="модель-со-смешанными-эффектами" class="section level3 hasAnchor" number="11.2.6">
 <h3><span class="header-section-number">11.2.6</span> Модель со смешанными эффектами<a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>В данных есть группировка по языкам, которую мы все это время игнорировали. Давайте сделаем модель со смешанными эффектами:</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="байесовский-регрессионный-анализ.html#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>language),</span>
-<span id="cb271-2"><a href="байесовский-регрессионный-анализ.html#cb271-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="байесовский-регрессионный-анализ.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(n_tokens <span class="sc">~</span> n_words<span class="sc">+</span>(<span class="dv">1</span><span class="sc">|</span>language),</span>
+<span id="cb28-2"><a href="байесовский-регрессионный-анализ.html#cb28-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> ud)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"","2":"b","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"b","3":"n_words","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 104, 115.6)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sd","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"},{"1":"","2":"sd","3":"","4":"language","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"","2":"sd","3":"Intercept","4":"language","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 115.6)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="байесовский-регрессионный-анализ.html#cb272-1" aria-hidden="true" tabindex="-1"></a>fit_mixed <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>language),</span>
-<span id="cb272-2"><a href="байесовский-регрессионный-анализ.html#cb272-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> ud,</span>
-<span id="cb272-3"><a href="байесовский-регрессионный-анализ.html#cb272-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
-gcc -std=gnu99 -std=gnu11 -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-i2PIHO/r-base-4.1.2=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -g  -c foo.c -o foo.o
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:88,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
-  628 | namespace Eigen {
-      | ^~~~~~~~~
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
-  628 | namespace Eigen {
-      |                 ^
-In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Dense:1,
-                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
-                 from &lt;command-line&gt;:
-/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.1/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
-   96 | #include &lt;complex&gt;
-      |          ^~~~~~~~~
-compilation terminated.
-make: *** [/usr/lib/R/etc/Makeconf:168: foo.o] Error 1</code></pre>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="байесовский-регрессионный-анализ.html#cb274-1" aria-hidden="true" tabindex="-1"></a>fit_mixed</span></code></pre></div>
-<pre><code> Family: gaussian 
-  Links: mu = identity; sigma = identity 
-Formula: n_tokens ~ n_words + (1 | language) 
-   Data: ud (Number of observations: 20282) 
-  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
-         total post-warmup draws = 4000
-
-Group-Level Effects: 
-~language (Number of levels: 9) 
-              Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sd(Intercept)    64.03     18.87    38.13   111.85 1.01      558     1054
-
-Population-Level Effects: 
-          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-Intercept     5.91     20.69   -36.51    46.11 1.00      642      824
-n_words       0.49      0.00     0.49     0.49 1.00     4075     2333
-
-Family Specific Parameters: 
-      Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-sigma    29.28      0.14    29.01    29.55 1.00     2316     1988
-
-Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
-and Tail_ESS are effective sample size measures, and Rhat is the potential
-scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="байесовский-регрессионный-анализ.html#cb276-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_mixed)</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-223-1.png" width="672" /></p>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="байесовский-регрессионный-анализ.html#cb277-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
-<span id="cb277-2"><a href="байесовский-регрессионный-анализ.html#cb277-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_mixed, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb277-3"><a href="байесовский-регрессионный-анализ.html#cb277-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
-<span id="cb277-4"><a href="байесовский-регрессионный-анализ.html#cb277-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
-<span id="cb277-5"><a href="байесовский-регрессионный-анализ.html#cb277-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb277-6"><a href="байесовский-регрессионный-анализ.html#cb277-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>language)</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-223-2.png" width="672" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="байесовский-регрессионный-анализ.html#cb29-1" aria-hidden="true" tabindex="-1"></a>fit_mixed <span class="ot">&lt;-</span> <span class="fu">brm</span>(n_tokens <span class="sc">~</span> n_words <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>language),</span>
+<span id="cb29-2"><a href="байесовский-регрессионный-анализ.html#cb29-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> ud,</span>
+<span id="cb29-3"><a href="байесовский-регрессионный-анализ.html#cb29-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cores =</span> n_cores, <span class="at">refresh =</span> <span class="dv">0</span>, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Running /usr/lib/R/bin/R CMD SHLIB foo.c
+## gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -fdebug-prefix-map=/build/r-base-a3XuZ5/r-base-4.2.2.20221110=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+##   628 | namespace Eigen {
+##       | ^~~~~~~~~
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+##   628 | namespace Eigen {
+##       |                 ^
+## In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+##                  from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+##                  from &lt;command-line&gt;:
+## /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+##    96 | #include &lt;complex&gt;
+##       |          ^~~~~~~~~
+## compilation terminated.
+## make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<pre><code>## Warning: There were 4 divergent transitions after warmup. See
+## https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+## to find out why this is a problem and how to eliminate them.</code></pre>
+<pre><code>## Warning: There were 166 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+## https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
+<pre><code>## Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="байесовский-регрессионный-анализ.html#cb34-1" aria-hidden="true" tabindex="-1"></a>fit_mixed</span></code></pre></div>
+<pre><code>## Warning: There were 4 divergent transitions after warmup. Increasing
+## adapt_delta above 0.8 may help. See
+## http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: n_tokens ~ n_words + (1 | language) 
+##    Data: ud (Number of observations: 20282) 
+##   Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup draws = 4000
+## 
+## Group-Level Effects: 
+## ~language (Number of levels: 9) 
+##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sd(Intercept)    62.68     18.87    37.78   107.06 1.01      602      798
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept     8.09     22.32   -33.89    52.94 1.00      634      786
+## n_words       0.49      0.00     0.49     0.49 1.00     3710     2375
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma    29.29      0.15    29.01    29.58 1.00     2057     1781
+## 
+## Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="байесовский-регрессионный-анализ.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fit_mixed)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="байесовский-регрессионный-анализ.html#cb38-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="байесовский-регрессионный-анализ.html#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(fit_mixed, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb38-3"><a href="байесовский-регрессионный-анализ.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb38-4"><a href="байесовский-регрессионный-анализ.html#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.01</span>)<span class="sc">+</span></span>
+<span id="cb38-5"><a href="байесовский-регрессионный-анализ.html#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb38-6"><a href="байесовский-регрессионный-анализ.html#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>language)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 <p>То, что получилось учитывает общий эффект всех языков: посмотрите на каталанский. Если построить модель по каждому языку, то получится совсем другая картина:</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="байесовский-регрессионный-анализ.html#cb278-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
-<span id="cb278-2"><a href="байесовский-регрессионный-анализ.html#cb278-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
-<span id="cb278-3"><a href="байесовский-регрессионный-анализ.html#cb278-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
-<span id="cb278-4"><a href="байесовский-регрессионный-анализ.html#cb278-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>)<span class="sc">+</span></span>
-<span id="cb278-5"><a href="байесовский-регрессионный-анализ.html#cb278-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>language)</span></code></pre></div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-224-1.png" width="672" /></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="байесовский-регрессионный-анализ.html#cb39-1" aria-hidden="true" tabindex="-1"></a>ud <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="байесовский-регрессионный-анализ.html#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(n_words, n_tokens))<span class="sc">+</span></span>
+<span id="cb39-3"><a href="байесовский-регрессионный-анализ.html#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="байесовский-регрессионный-анализ.html#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>)<span class="sc">+</span></span>
+<span id="cb39-5"><a href="байесовский-регрессионный-анализ.html#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>language)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <div class="rmdtask">
 <p>
 В работе <span class="citation"><span class="citation">(<a href="#ref-coretta2016" role="doc-biblioref">Coretta 2016</a>)</span></span> собраны <a
@@ -673,7 +678,7 @@ href="https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta
 результаты модели.
 </p>
 </div>
-<p><img src="da4l_files/figure-html/unnamed-chunk-228-1.png" width="672" /></p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 
 </div>
 </div>

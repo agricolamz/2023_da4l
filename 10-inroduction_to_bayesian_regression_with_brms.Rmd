@@ -85,7 +85,7 @@ get_prior(n_tokens ~ 1,
 
 Вот модель с встроенными априорными распределениями:
 
-```{r brm_intercept, cache = TRUE, message=FALSE, warning=FALSE}
+```{r brm_intercept, cache = TRUE, message=FALSE, warning=FALSE, error=FALSE}
 fit_intercept <- brm(n_tokens ~ 1, 
                      data = ud,
                      cores = n_cores, 
@@ -104,7 +104,7 @@ plot(fit_intercept)
 
 Вы пострили регрессию, и самый простой способ проверить сходимость это визуально посмотреть на цепи:
 
-```{r convergence, cache=TRUE, echo = FALSE, message=FALSE, warning=FALSE}
+```{r convergence, cache=TRUE, echo = FALSE, message=FALSE, warning=FALSE, , error=FALSE}
 mtcars %>% 
   brm(mpg~disp, data = .,
       cores = n_cores,
@@ -180,7 +180,7 @@ get_prior(n_tokens ~ n_words+0,
           data = ud)
 ```
 
-```{r brm_slope, cache=TRUE}
+```{r brm_slope, cache=TRUE, error=FALSE}
 fit_slope <- brm(n_tokens ~ n_words+0, 
                  data = ud,
                  cores = n_cores,
@@ -212,7 +212,7 @@ get_prior(n_tokens ~ n_words,
           data = ud)
 ```
 
-```{r brm_slope_intercept, cache=TRUE}
+```{r brm_slope_intercept, cache=TRUE, error=FALSE}
 fit_slope_intercept <- brm(n_tokens ~ n_words,
                            data = ud,
                            cores = n_cores, refresh = 0, silent = TRUE)
@@ -239,7 +239,7 @@ get_prior(n_tokens ~ n_words+(1|language),
           data = ud)
 ```
 
-```{r mixed, cache=TRUE}
+```{r mixed, cache=TRUE, error=FALSE}
 fit_mixed <- brm(n_tokens ~ n_words + (1|language),
                  data = ud,
                  cores = n_cores, refresh = 0, silent = TRUE)
