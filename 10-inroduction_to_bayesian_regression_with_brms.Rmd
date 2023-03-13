@@ -39,7 +39,7 @@ pBrackets::grid.brackets(815, 420, 815, 545, lwd=2, col="red")
 * свободный член (intercept) -- значение $y$ при $x = 0$;
 * угловой коэффициент (slope) -- изменение $y$ при изменении $x$ на одну единицу.
 
-$$y_i = \beta_0 + \beta_1\times x_i + \epsilon_i$$
+$$y_i = \hat{\beta_0} + \hat{\beta_1}\times x_i + \epsilon_i$$
 
 Причем, иногда мы можем один или другой параметр считать равным нулю.
 
@@ -77,7 +77,7 @@ ud %>%
 ```{r}
 library(brms)
 parallel::detectCores()
-n_cores <- 7 # parallel::detectCores() - 1
+n_cores <- 15 # parallel::detectCores() - 1
 
 get_prior(n_tokens ~ 1, 
           data = ud)
@@ -88,7 +88,9 @@ get_prior(n_tokens ~ 1,
 ```{r brm_intercept, cache = TRUE, message=FALSE, warning=FALSE}
 fit_intercept <- brm(n_tokens ~ 1, 
                      data = ud,
-                     cores = n_cores, refresh = 0, silent = TRUE)
+                     cores = n_cores, 
+                     refresh = 0, 
+                     silent = TRUE)
 ```
 
 При желании встроенные априорные расспеределения можно не использовать и вставлять в аргумент `prior` априорные распределения по вашему желанию.
@@ -98,20 +100,50 @@ fit_intercept
 plot(fit_intercept)
 ```
 
-Взято [остюда](https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup):
+###  Проверка сходимости модели
 
-####  R-hat
+Вы пострили регрессию, и самый простой способ проверить сходимость это визуально посмотреть на цепи:
 
-R-hat convergence diagnostic compares the between- and within-chain estimates for model parameters and other univariate quantities of interest. If chains have not mixed well (ie, the between- and within-chain estimates don’t agree), R-hat is larger than 1. We recommend running at least four chains by default and only using the sample if R-hat is less than 1.01. Stan reports R-hat which is the maximum of rank normalized split-R-hat and rank normalized folded-split-R-hat, which works for thick tailed distributions and is sensitive also to differences in scale. For more details on this diagnostic, see https://arxiv.org/abs/1903.08008.
+```{r convergence, cache=TRUE, echo = FALSE, message=FALSE, warning=FALSE}
+mtcars %>% 
+  brm(mpg~disp, data = .,
+      cores = n_cores,
+      refresh = 0,
+      silent = TRUE) ->
+  fit
 
-Recommendations:
+tibble(y = c(fit$fit@sim$samples[[1]]$b_disp,
+            fit$fit@sim$samples[[2]]$b_disp,
+            fit$fit@sim$samples[[1]]$b_disp,
+            fit$fit@sim$samples[[3]]$b_disp+0.03,
+            fit$fit@sim$samples[[1]]$b_disp,
+            fit$fit@sim$samples[[4]]$b_disp+sqrt(seq(0.001, 0, length = 2000))),
+      x = rep(1:2000, 6),
+      chain = rep(rep(c("chain_1", "chain_2"), each = 2000), 3),
+      type = rep(c("converged", "converged, but...", "one not converged"), each = 4000)) %>% 
+  filter(x > 100) %>% 
+  ggplot(aes(x, y, color = chain))+
+  geom_line(linewidth = 0.1)+
+  facet_wrap(~type)+
+  theme(legend.position = "none")+
+  labs(x = "", y = "")
+```
 
-* Look at Bulk- and Tail-ESS for further information.
-* Look at the rank plot to see how the chains differ from each other.
-* Look at the local and quantile efficiency plots.
-* You might try setting a higher value for the iter argument. By default iter is 2000
+Дальнейший фрагемнт взят из [документации Stan](https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup) (Stan --- это один из популярнейших сэмплеров для MCMC и многого другого, который используется в `brms`).
 
-#### Bulk ESS
+#### R-hat
+
+R-hat -- это диагностика сходимости, которая сравнивает оценку модели, которая получается внутри цепи и между цепями (введена в [@gelman92]). Если цепи не перемешались (например, если нет согласия внутри цепи и между цепями) R-hat будет иметь значение больше 1. Собственно для этого рекоммендуется запускать по-крайней мере 4 цепи. Stan возвращает что-то более сложное, что называется maximum of rank normalized split-R-hat и rank normalized folded-split-R-hat, однако мы не будем в этом разбиратсья, отсылаю к [статье](https://arxiv.org/abs/1903.08008) или [к посту](https://statmodeling.stat.columbia.edu/2019/03/19/maybe-its-time-to-let-the-old-ways-die-or-we-broke-r-hat-so-now-we-have-to-fix-it/) в блоге одного из авторов с объяснением.
+
+**Самое главное**: $\hat{R} \leq 1.01$ -- значит проблем со сходмиостью цепей не обнаружено.
+
+#### Effective sample size (ESS)
+
+Effective sample size (ESS) --- это оценка размера выборки достаточной для того, чтобы получить результат такой же точности при помощи случайной выборки из генеральной совокупности. Эту меру используют для оценки размера выборки, в анализе временных рядов и в байесовской статистике. Так как в байесовской статистике мы используем сэмпл из апостериорного распределения для статистического вывода, а значения в цепях коррелируют, то ESS пытается оценить, сколько нужно независимых сэмплов, чтобы получить такую же точность, что и результат MCMC. Чем выше ESS -- тем лучше.
+
+Stan возвращает две меры:
+
+* `Bulk-ESS`
 
 Roughly speaking, the effective sample size (ESS) of a quantity of interest captures how many independent draws contain the same amount of information as the dependent sample obtained by the MCMC algorithm. Clearly, the higher the ESS the better. Stan uses R-hat adjustment to use the between-chain information in computing the ESS. For example, in case of multimodal distributions with well-separated modes, this leads to an ESS estimate that is close to the number of distinct modes that are found.
 
@@ -119,33 +151,19 @@ Bulk-ESS refers to the effective sample size based on the rank normalized draws.
 
 Often quite smaller ESS would be sufficient for the desired estimation accuracy, but the estimation of ESS and convergence diagnostics themselves require higher ESS. We recommend requiring that the bulk-ESS is greater than 100 times the number of chains. For example, when running four chains, this corresponds to having a rank-normalized effective sample size of at least 400.
 
-Recommendations:
-
-* You might try setting a higher value for the iter argument. By default iter is 2000
-* Look at the rank plot to see how the chains differ from each other.
-* Look at the local and quantile efficiency plots.
-* Look at change in bulk-ESS when the number of iterations increase. If R-hat is less than 1.01 and bulk-ESS grows linearly with the number of iterations and eventually exceeds the recommended limit, the mixing is sufficient but MCMC has high autocorrelation requiring a large number of iterations
-
-#### Tail ESS
+* `Tail ESS`
 
 Tail-ESS computes the minimum of the effective sample sizes (ESS) of the 5% and 95% quantiles. Tail-ESS can help diagnosing problems due to different scales of the chains and slow mixing in the tails. See also general information about ESS above in description of bulk-ESS.
 
-Recommendations:
-
-* You might try setting a higher value for the iter argument. By default iter is 2000
-* Look at the rank plot to see how the chains differ from each other.
-* Look at the local and quantile efficiency plots.
-* Look at change in tail-ESS when the number of iterations increase. If R-hat is less than 1.01 and tail-ESS grows linearly with the number of iterations and eventually exceeds the recommended limit, the mixing is sufficient but MCMC has high autocorrelation requiring a large number of iterations
-
-#### Вернемся к нашим баранам
+### Опять модель только со свободным членом
 
 Давайте посмотрим на наши данные:
 
 ```{r, echo=FALSE}
 as_draws_array(fit_intercept) %>% 
   as_tibble() %>% 
-  select(contains("b_Intercept")) %>% 
   pivot_longer(values_to = "n_words", names_to = "chain", everything()) %>% 
+  filter(str_detect(chain, "Intercept")) %>% 
   ggplot(aes(n_words))+
   annotate(geom = "label", x = 800, y = 3000, label = "Ну, предположим, ква", size = 8)+
   geom_histogram(data = ud, alpha = 0.4)+
@@ -165,7 +183,9 @@ get_prior(n_tokens ~ n_words+0,
 ```{r brm_slope, cache=TRUE}
 fit_slope <- brm(n_tokens ~ n_words+0, 
                  data = ud,
-                 cores = n_cores, refresh = 0, silent = TRUE)
+                 cores = n_cores,
+                 refresh = 0,
+                 silent = TRUE)
 ```
 
 ```{r}
@@ -173,7 +193,7 @@ fit_slope
 plot(fit_slope)
 ```
 
-Давайте совместим предсказания модели и наши наблюдения.
+Давайте посмотрим на предсказания модели в том, виде, в каком их может интерпретировать не специалист по байесовской статистике:
 
 ```{r}
 library(tidybayes)
@@ -247,7 +267,7 @@ ud %>%
 ```
 
 ```{block, type = "rmdtask"}
-В работе [@coretta2016] собраны [данные](https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv) длительности исландских гласных. Используя байесовскую регрессию, смоделируйте длительность гласного (`vowel.dur`) в зависимости от аспирированности (`aspiration`) учитывая эффект носителя. Визуализируйте результаты модели
+В работе [@coretta2016] собраны [данные](https://raw.githubusercontent.com/agricolamz/2022_da4l/master/data/Coretta_2017_icelandic.csv) длительности исландских гласных. Используя байесовскую регрессию с априорными распределениями по умолчанию, смоделируйте длительность гласного (`vowel.dur`) в зависимости от аспирированности (`aspiration`) учитывая эффект носителя. Визуализируйте результаты модели.
 ```
 
 ```{r, include=FALSE}

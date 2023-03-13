@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2 Распределения | Анализ данных для лингвистов</title>
   <meta name="description" content="2 Распределения | Анализ данных для лингвистов" />
-  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2 Распределения | Анализ данных для лингвистов" />
   <meta property="og:type" content="book" />
@@ -279,9 +279,11 @@ div.csl-indent {
 <li class="chapter" data-level="11.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#brms-1"><i class="fa fa-check"></i><b>11.2</b> <code>brms</code></a>
 <ul>
 <li class="chapter" data-level="11.2.1" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.1</b> Модель только со свободным членом</a></li>
-<li class="chapter" data-level="11.2.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.2</b> Модель только с угловым коэффициентом</a></li>
-<li class="chapter" data-level="11.2.3" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.3</b> Модель с угловым коэффициентом и свободным членом</a></li>
-<li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.4</b> Модель со смешанными эффектами</a></li>
+<li class="chapter" data-level="11.2.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#проверка-сходимости-модели"><i class="fa fa-check"></i><b>11.2.2</b> Проверка сходимости модели</a></li>
+<li class="chapter" data-level="11.2.3" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#опять-модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.3</b> Опять модель только со свободным членом</a></li>
+<li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.4</b> Модель только с угловым коэффициентом</a></li>
+<li class="chapter" data-level="11.2.5" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.5</b> Модель с угловым коэффициентом и свободным членом</a></li>
+<li class="chapter" data-level="11.2.6" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.6</b> Модель со смешанными эффектами</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
@@ -349,12 +351,12 @@ div.csl-indent {
 знаков после запятой.
 </p>
 </div>
-<form name="form_47822" onsubmit="return validate_form_47822()" method="post">
-<input type="text" name="answer_47822"><br><input type="submit" value="check">
+<form name="form_66210" onsubmit="return validate_form_66210()" method="post">
+<input type="text" name="answer_66210"><br><input type="submit" value="check">
 </form>
-<p id="result_47822">
+<p id="result_66210">
 </p>
-<script> function validate_form_47822() {var x, text; var x = document.forms["form_47822"]["answer_47822"].value;if (x == "-40.704"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_47822').innerHTML = text; return false;} </script>
+<script> function validate_form_66210() {var x, text; var x = document.forms["form_66210"]["answer_66210"].value;if (x == "-40.704"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_66210').innerHTML = text; return false;} </script>
 <div class="rmdtask">
 <p>
 Данные из базы данных фонетических инвентарей PHOIBLE <span class="citation"><span class="citation">(<a href="#ref-phoible" role="doc-biblioref">Moran, McCloy, and Wright 2014</a>)</span></span>, достаточно сильно упрощая, можно
@@ -365,21 +367,21 @@ div.csl-indent {
 запятой.
 </p>
 </div>
-<form name="form_3817" onsubmit="return validate_form_3817()" method="post">
-<input type="text" name="answer_3817"><br><input type="submit" value="check">
+<form name="form_63010" onsubmit="return validate_form_63010()" method="post">
+<input type="text" name="answer_63010"><br><input type="submit" value="check">
 </form>
-<p id="result_3817">
+<p id="result_63010">
 </p>
-<script> function validate_form_3817() {var x, text; var x = document.forms["form_3817"]["answer_3817"].value;if (x == "0.655"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_3817').innerHTML = text; return false;} </script>
+<script> function validate_form_63010() {var x, text; var x = document.forms["form_63010"]["answer_63010"].value;if (x == "0.655"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_63010').innerHTML = text; return false;} </script>
 <div class="rmdtask">
 <p>
 Какие есть недостатки у модели из предыдущего задания?
 </p>
 </div>
-<p id="hint_109283", onclick="return show_hint_109283()">ответы:</p>
-<p id="result_109283">
+<p id="hint_157532", onclick="return show_hint_157532()">ответы:</p>
+<p id="result_157532">
 </p>
-<script> function show_hint_109283() {var x = document.getElementById("result_109283").innerHTML;if(!x){document.getElementById('result_109283').innerHTML = '<p id="hint_75864", onclick="return show_hint_75864()">недостаток 1</p><p id="result_75864"></p><p id="hint_99799", onclick="return show_hint_99799()">недостаток 2</p><p id="result_99799"></p>';}else {document.getElementById("result_109283").innerHTML = "";}}function show_hint_75864() {var x = document.getElementById("result_75864").innerHTML;if(!x){document.getElementById('result_75864').innerHTML = 'Согласно данной модели, количество фонем в языках может принимать значение равное любому действительному числу, в то время как в данных мы наблюдаем только целые числа.';}else {document.getElementById("result_75864").innerHTML = "";}}function show_hint_99799() {var x = document.getElementById("result_99799").innerHTML;if(!x){document.getElementById('result_99799').innerHTML = 'Данная модель предсказывает, что количество фонем 0.4% языков  меньше нуля, что представляется невозможным с точки зрения лингвистики.';}else {document.getElementById("result_99799").innerHTML = "";}}</script>
+<script> function show_hint_157532() {var x = document.getElementById("result_157532").innerHTML;if(!x){document.getElementById('result_157532').innerHTML = '<p id="hint_94638", onclick="return show_hint_94638()">недостаток 1</p><p id="result_94638"></p><p id="hint_51745", onclick="return show_hint_51745()">недостаток 2</p><p id="result_51745"></p>';}else {document.getElementById("result_157532").innerHTML = "";}}function show_hint_94638() {var x = document.getElementById("result_94638").innerHTML;if(!x){document.getElementById('result_94638').innerHTML = 'Согласно данной модели, количество фонем в языках может принимать значение равное любому действительному числу, в то время как в данных мы наблюдаем только целые числа.';}else {document.getElementById("result_94638").innerHTML = "";}}function show_hint_51745() {var x = document.getElementById("result_51745").innerHTML;if(!x){document.getElementById('result_51745').innerHTML = 'Данная модель предсказывает, что количество фонем 0.4% языков  меньше нуля, что представляется невозможным с точки зрения лингвистики.';}else {document.getElementById("result_51745").innerHTML = "";}}</script>
 </div>
 <div id="дискретные-переменные" class="section level2 hasAnchor" number="2.2">
 <h2><span class="header-section-number">2.2</span> Дискретные переменные<a href="распределения.html#дискретные-переменные" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -405,24 +407,24 @@ div.csl-indent {
 запятой.
 </p>
 </div>
-<form name="form_19230" onsubmit="return validate_form_19230()" method="post">
-<input type="text" name="answer_19230"><br><input type="submit" value="check">
+<form name="form_49038" onsubmit="return validate_form_49038()" method="post">
+<input type="text" name="answer_49038"><br><input type="submit" value="check">
 </form>
-<p id="result_19230">
+<p id="result_49038">
 </p>
-<script> function validate_form_19230() {var x, text; var x = document.forms["form_19230"]["answer_19230"].value;if (x == "0.05"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_19230').innerHTML = text; return false;} </script>
+<script> function validate_form_49038() {var x, text; var x = document.forms["form_49038"]["answer_49038"].value;if (x == "0.05"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_49038').innerHTML = text; return false;} </script>
 <div class="rmdtask">
 <p>
 А какое значение количества <em>s</em>-генитивов наиболее ожидаемо,
 согласно этой модели?
 </p>
 </div>
-<form name="form_72" onsubmit="return validate_form_72()" method="post">
-<input type="text" name="answer_72"><br><input type="submit" value="check">
+<form name="form_70686" onsubmit="return validate_form_70686()" method="post">
+<input type="text" name="answer_70686"><br><input type="submit" value="check">
 </form>
-<p id="result_72">
+<p id="result_70686">
 </p>
-<script> function validate_form_72() {var x, text; var x = document.forms["form_72"]["answer_72"].value;if (x == "107"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_72').innerHTML = text; return false;} </script>
+<script> function validate_form_70686() {var x, text; var x = document.forms["form_70686"]["answer_70686"].value;if (x == "107"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_70686').innerHTML = text; return false;} </script>
 </div>
 <div id="геометрическое-распределение" class="section level3 hasAnchor" number="2.2.2">
 <h3><span class="header-section-number">2.2.2</span> Геометрическое распределение<a href="распределения.html#геометрическое-распределение" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -443,12 +445,12 @@ div.csl-indent {
 <em>of</em>-генитив будет третьим по счету?
 </p>
 </div>
-<form name="form_40179" onsubmit="return validate_form_40179()" method="post">
-<input type="text" name="answer_40179"><br><input type="submit" value="check">
+<form name="form_52560" onsubmit="return validate_form_52560()" method="post">
+<input type="text" name="answer_52560"><br><input type="submit" value="check">
 </form>
-<p id="result_40179">
+<p id="result_52560">
 </p>
-<script> function validate_form_40179() {var x, text; var x = document.forms["form_40179"]["answer_40179"].value;if (x == "0.081"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_40179').innerHTML = text; return false;} </script>
+<script> function validate_form_52560() {var x, text; var x = document.forms["form_52560"]["answer_52560"].value;if (x == "0.081"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_52560').innerHTML = text; return false;} </script>
 </div>
 <div id="распределение-пуассона" class="section level3 hasAnchor" number="2.2.3">
 <h3><span class="header-section-number">2.2.3</span> Распределение Пуассона<a href="распределения.html#распределение-пуассона" class="anchor-section" aria-label="Anchor link to header"></a></h3>

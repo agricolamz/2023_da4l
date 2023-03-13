@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Метод максимального правдоподобия | Анализ данных для лингвистов</title>
   <meta name="description" content="3 Метод максимального правдоподобия | Анализ данных для лингвистов" />
-  <meta name="generator" content="bookdown 0.32 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Метод максимального правдоподобия | Анализ данных для лингвистов" />
   <meta property="og:type" content="book" />
@@ -279,9 +279,11 @@ div.csl-indent {
 <li class="chapter" data-level="11.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#brms-1"><i class="fa fa-check"></i><b>11.2</b> <code>brms</code></a>
 <ul>
 <li class="chapter" data-level="11.2.1" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.1</b> Модель только со свободным членом</a></li>
-<li class="chapter" data-level="11.2.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.2</b> Модель только с угловым коэффициентом</a></li>
-<li class="chapter" data-level="11.2.3" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.3</b> Модель с угловым коэффициентом и свободным членом</a></li>
-<li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.4</b> Модель со смешанными эффектами</a></li>
+<li class="chapter" data-level="11.2.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#проверка-сходимости-модели"><i class="fa fa-check"></i><b>11.2.2</b> Проверка сходимости модели</a></li>
+<li class="chapter" data-level="11.2.3" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#опять-модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.3</b> Опять модель только со свободным членом</a></li>
+<li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.4</b> Модель только с угловым коэффициентом</a></li>
+<li class="chapter" data-level="11.2.5" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.5</b> Модель с угловым коэффициентом и свободным членом</a></li>
+<li class="chapter" data-level="11.2.6" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.6</b> Модель со смешанными эффектами</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
@@ -329,12 +331,12 @@ div.csl-indent {
 </p>
 </div>
 <p><img src="da4l_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
-<form name="form_61983" onsubmit="return validate_form_61983()" method="post">
-<input type="text" name="answer_61983"><br><input type="submit" value="check">
+<form name="form_11813" onsubmit="return validate_form_11813()" method="post">
+<input type="text" name="answer_11813"><br><input type="submit" value="check">
 </form>
-<p id="result_61983">
+<p id="result_11813">
 </p>
-<script> function validate_form_61983() {var x, text; var x = document.forms["form_61983"]["answer_61983"].value;if (x == "0.267"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_61983').innerHTML = text; return false;} </script>
+<script> function validate_form_11813() {var x, text; var x = document.forms["form_11813"]["answer_11813"].value;if (x == "0.267"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_11813').innerHTML = text; return false;} </script>
 <div class="rmdtask">
 <p>
 Если принять на веру, что биномиальное распределение с параметрами
@@ -350,12 +352,12 @@ Binom(n = 400, p = 0.9)\right) = ??\]</span></span> Ответ округлит�
 меньше знаков после запятой.
 </p>
 </div>
-<form name="form_48293" onsubmit="return validate_form_48293()" method="post">
-<input type="text" name="answer_48293"><br><input type="submit" value="check">
+<form name="form_20363" onsubmit="return validate_form_20363()" method="post">
+<input type="text" name="answer_20363"><br><input type="submit" value="check">
 </form>
-<p id="result_48293">
+<p id="result_20363">
 </p>
-<script> function validate_form_48293() {var x, text; var x = document.forms["form_48293"]["answer_48293"].value;if (x == "0.06"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_48293').innerHTML = text; return false;} </script>
+<script> function validate_form_20363() {var x, text; var x = document.forms["form_20363"]["answer_20363"].value;if (x == "0.06"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_20363').innerHTML = text; return false;} </script>
 </div>
 <div id="функция-правдоподобия" class="section level2 hasAnchor" number="3.2">
 <h2><span class="header-section-number">3.2</span> Функция правдоподобия<a href="метод-максимального-правдоподобия.html#функция-правдоподобия" class="anchor-section" aria-label="Anchor link to header"></a></h2>
