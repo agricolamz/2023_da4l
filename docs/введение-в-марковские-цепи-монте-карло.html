@@ -53,7 +53,7 @@
 <link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
 <link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<script src="libs/htmlwidgets-1.6.1/htmlwidgets.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <script src="libs/viz-1.8.2/viz.js"></script>
 <link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
 <script src="libs/grViz-binding-1.0.9/grViz.js"></script>
@@ -284,6 +284,15 @@ div.csl-indent {
 <li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.4</b> Модель только с угловым коэффициентом</a></li>
 <li class="chapter" data-level="11.2.5" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.5</b> Модель с угловым коэффициентом и свободным членом</a></li>
 <li class="chapter" data-level="11.2.6" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.6</b> Модель со смешанными эффектами</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html"><i class="fa fa-check"></i><b>12</b> Введение в логистическую регресиию</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#основы-регрессионного-анализа-2"><i class="fa fa-check"></i><b>12.1</b> Основы регрессионного анализа</a></li>
+<li class="chapter" data-level="12.2" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#логистическая-регрессия"><i class="fa fa-check"></i><b>12.2</b> Логистическая регрессия</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#теория"><i class="fa fa-check"></i><b>12.2.1</b> Теория</a></li>
+<li class="chapter" data-level="12.2.2" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#brms-2"><i class="fa fa-check"></i><b>12.2.2</b> brms</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
@@ -629,7 +638,7 @@ scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
 <span id="cb147-2"><a href="введение-в-марковские-цепи-монте-карло.html#cb147-2" aria-hidden="true" tabindex="-1"></a>  posterior<span class="sc">::</span><span class="fu">summarize_draws</span>()</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["num"],"align":["right"]},{"label":["median"],"name":[3],"type":["num"],"align":["right"]},{"label":["sd"],"name":[4],"type":["num"],"align":["right"]},{"label":["mad"],"name":[5],"type":["num"],"align":["right"]},{"label":["q5"],"name":[6],"type":["num"],"align":["right"]},{"label":["q95"],"name":[7],"type":["num"],"align":["right"]},{"label":["rhat"],"name":[8],"type":["num"],"align":["right"]},{"label":["ess_bulk"],"name":[9],"type":["num"],"align":["right"]},{"label":["ess_tail"],"name":[10],"type":["num"],"align":["right"]}],"data":[{"1":"b_Intercept","2":"89.5","3":"89.6","4":"1.93","5":"1.89","6":"86.4","7":"92.6","8":"1.00","9":"3155.","10":"2162."},{"1":"sigma","2":"25.0","3":"24.9","4":"1.28","5":"1.29","6":"23.0","7":"27.1","8":"1.00","9":"4167.","10":"3039."},{"1":"lp__","2":"-822.","3":"-821.","4":"0.989","5":"0.701","6":"-823.","7":"-821.","8":"1.00","9":"1917.","10":"2472."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["variable"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["median"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["sd"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mad"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["q5"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["q95"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["rhat"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["ess_bulk"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["ess_tail"],"name":[10],"type":["dbl"],"align":["right"]}],"data":[{"1":"b_Intercept","2":"89.53186","3":"89.55122","4":"1.9253914","5":"1.894501","6":"86.37373","7":"92.62781","8":"1.000294","9":"3155.186","10":"2162.195"},{"1":"sigma","2":"24.97836","3":"24.93944","4":"1.2793220","5":"1.287759","6":"22.95309","7":"27.13646","8":"1.001614","9":"4167.479","10":"3039.491"},{"1":"lp__","2":"-821.53083","3":"-821.23781","4":"0.9888982","5":"0.700680","6":"-823.45228","7":"-820.60244","8":"1.002011","9":"1917.317","10":"2471.557"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="введение-в-марковские-цепи-монте-карло.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as_draws_rvars</span>(normal_fit)</span></code></pre></div>

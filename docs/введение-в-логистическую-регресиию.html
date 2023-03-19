@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>12 Введение в логистическую регресиию | Анализ данных для лингвистов</title>
+  <meta name="description" content="12 Введение в логистическую регресиию | Анализ данных для лингвистов" />
+  <meta name="generator" content="bookdown 0.33 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="12 Введение в логистическую регресиию | Анализ данных для лингвистов" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="12 Введение в логистическую регресиию | Анализ данных для лингвистов" />
+  
+  
+  
+
+<meta name="author" content="Г. А. Мороз" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="байесовский-регрессионный-анализ.html"/>
+<link rel="next" href="ссылки-на-литературу.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="libs/viz-1.8.2/viz.js"></script>
+<link href="libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="libs/grViz-binding-1.0.9/grViz.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Анализ данных для лингвистов</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> О курсе</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#используемые-пакеты"><i class="fa fa-check"></i><b>1.1</b> Используемые пакеты</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#домашние-задания"><i class="fa fa-check"></i><b>1.2</b> Домашние задания</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="распределения.html"><a href="распределения.html"><i class="fa fa-check"></i><b>2</b> Распределения</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="распределения.html"><a href="распределения.html#распределения-в-r"><i class="fa fa-check"></i><b>2.1</b> Распределения в R</a></li>
+<li class="chapter" data-level="2.2" data-path="распределения.html"><a href="распределения.html#дискретные-переменные"><i class="fa fa-check"></i><b>2.2</b> Дискретные переменные</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="распределения.html"><a href="распределения.html#биномиальное-распределение"><i class="fa fa-check"></i><b>2.2.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="2.2.2" data-path="распределения.html"><a href="распределения.html#геометрическое-распределение"><i class="fa fa-check"></i><b>2.2.2</b> Геометрическое распределение</a></li>
+<li class="chapter" data-level="2.2.3" data-path="распределения.html"><a href="распределения.html#распределение-пуассона"><i class="fa fa-check"></i><b>2.2.3</b> Распределение Пуассона</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="распределения.html"><a href="распределения.html#числовые-переменные"><i class="fa fa-check"></i><b>2.3</b> Числовые переменные</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="распределения.html"><a href="распределения.html#нормальное-распределение"><i class="fa fa-check"></i><b>2.3.1</b> Нормальное распределение</a></li>
+<li class="chapter" data-level="2.3.2" data-path="распределения.html"><a href="распределения.html#логнормальное-распределение"><i class="fa fa-check"></i><b>2.3.2</b> Логнормальное распределение</a></li>
+<li class="chapter" data-level="2.3.3" data-path="распределения.html"><a href="распределения.html#что-еще-почитать-про-распределения"><i class="fa fa-check"></i><b>2.3.3</b> Что еще почитать про распределения?</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html"><i class="fa fa-check"></i><b>3</b> Метод максимального правдоподобия</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#оценка-вероятности"><i class="fa fa-check"></i><b>3.1</b> Оценка вероятности</a></li>
+<li class="chapter" data-level="3.2" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#функция-правдоподобия"><i class="fa fa-check"></i><b>3.2</b> Функция правдоподобия</a></li>
+<li class="chapter" data-level="3.3" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#пример-с-непрерывным-распределением"><i class="fa fa-check"></i><b>3.3</b> Пример с непрерывным распределением</a></li>
+<li class="chapter" data-level="3.4" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#метод-максимального-правдоподобия-mle"><i class="fa fa-check"></i><b>3.4</b> Метод максимального правдоподобия (MLE)</a></li>
+<li class="chapter" data-level="3.5" data-path="метод-максимального-правдоподобия.html"><a href="метод-максимального-правдоподобия.html#логорифм-функции-правдоподобия"><i class="fa fa-check"></i><b>3.5</b> Логорифм функции правдоподобия</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html"><i class="fa fa-check"></i><b>4</b> Модели смеси распределений</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#cмеси-распределений"><i class="fa fa-check"></i><b>4.1</b> Cмеси распределений</a></li>
+<li class="chapter" data-level="4.2" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#модели-смеси-распределений-1"><i class="fa fa-check"></i><b>4.2</b> Модели смеси распределений</a></li>
+<li class="chapter" data-level="4.3" data-path="модели-смеси-распределений.html"><a href="модели-смеси-распределений.html#несколько-замечаний"><i class="fa fa-check"></i><b>4.3</b> Несколько замечаний</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html"><i class="fa fa-check"></i><b>5</b> Байесовский статистический вывод</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#нотация"><i class="fa fa-check"></i><b>5.1</b> Нотация</a></li>
+<li class="chapter" data-level="5.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#категориальный-пример"><i class="fa fa-check"></i><b>5.2</b> Категориальный пример</a></li>
+<li class="chapter" data-level="5.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#разница-между-фриквентиским-и-байесовским-подходами"><i class="fa fa-check"></i><b>5.3</b> Разница между фриквентиским и байесовским подходами</a></li>
+<li class="chapter" data-level="5.4" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#биномиальные-данные"><i class="fa fa-check"></i><b>5.4</b> Биномиальные данные</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#биномиальное-распределение-1"><i class="fa fa-check"></i><b>5.4.1</b> Биномиальное распределение</a></li>
+<li class="chapter" data-level="5.4.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#бета-распределение"><i class="fa fa-check"></i><b>5.4.2</b> Бета распределение</a></li>
+<li class="chapter" data-level="5.4.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-биномиальных-данных"><i class="fa fa-check"></i><b>5.4.3</b> Байесовский апдейт биномиальных данных</a></li>
+<li class="chapter" data-level="5.4.4" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-биномиальных-данных-несколько-моделей"><i class="fa fa-check"></i><b>5.4.4</b> Байесовский апдейт биномиальных данных: несколько моделей</a></li>
+<li class="chapter" data-level="5.4.5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#что-почитать"><i class="fa fa-check"></i><b>5.4.5</b> Что почитать?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения"><i class="fa fa-check"></i><b>5.5</b> Байесовский апдейт нормального распределения</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения-выбор-из-нескольких-моделей"><i class="fa fa-check"></i><b>5.5.1</b> Байесовский апдейт нормального распределения: выбор из нескольких моделей</a></li>
+<li class="chapter" data-level="5.5.2" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#байесовский-апдейт-нормального-распределения-непрерывный-вариант"><i class="fa fa-check"></i><b>5.5.2</b> Байесовский апдейт нормального распределения: непрерывный вариант</a></li>
+<li class="chapter" data-level="5.5.3" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#что-почитать-1"><i class="fa fa-check"></i><b>5.5.3</b> Что почитать?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#другие-распределения"><i class="fa fa-check"></i><b>5.6</b> Другие распределения</a></li>
+<li class="chapter" data-level="5.7" data-path="байесовский-статистический-вывод.html"><a href="байесовский-статистический-вывод.html#вопросы-к-апостериорному-распределению"><i class="fa fa-check"></i><b>5.7</b> Вопросы к апостериорному распределению</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html"><i class="fa fa-check"></i><b>6</b> Байесовский доверительный интервал</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html#фреквентисткий-доверительный-интервал"><i class="fa fa-check"></i><b>6.1</b> Фреквентисткий доверительный интервал</a></li>
+<li class="chapter" data-level="6.2" data-path="байесовский-доверительный-интервал.html"><a href="байесовский-доверительный-интервал.html#байесовский-доверительный-интервал-1"><i class="fa fa-check"></i><b>6.2</b> Байесовский доверительный интервал</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html"><i class="fa fa-check"></i><b>7</b> Коэффициент Байеса</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#формула-байеса-опять"><i class="fa fa-check"></i><b>7.1</b> Формула Байеса опять</a></li>
+<li class="chapter" data-level="7.2" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#категориальные-данные"><i class="fa fa-check"></i><b>7.2</b> Категориальные данные</a></li>
+<li class="chapter" data-level="7.3" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#интерпретация-коэфициента-байеса"><i class="fa fa-check"></i><b>7.3</b> Интерпретация коэфициента Байеса</a></li>
+<li class="chapter" data-level="7.4" data-path="коэффициент-байеса.html"><a href="коэффициент-байеса.html#биномиальные-данные-1"><i class="fa fa-check"></i><b>7.4</b> Биномиальные данные</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="эмпирическая-байесовская-оценка.html"><a href="эмпирическая-байесовская-оценка.html"><i class="fa fa-check"></i><b>8</b> Эмпирическая байесовская оценка</a></li>
+<li class="chapter" data-level="9" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html"><i class="fa fa-check"></i><b>9</b> Введение в Марковские цепи Монте-Карло</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#марковские-цепи"><i class="fa fa-check"></i><b>9.1</b> Марковские цепи</a></li>
+<li class="chapter" data-level="9.2" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#хакерская-статистика-основано-на-статистика-для-хакеров-джейка-вандерпласа"><i class="fa fa-check"></i><b>9.2</b> Хакерская статистика (основано на “Статистика для хакеров” Джейка Вандерпласа)</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#биномиальные-данные-2"><i class="fa fa-check"></i><b>9.2.1</b> Биномиальные данные</a></li>
+<li class="chapter" data-level="9.2.2" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#метод-монте-карло"><i class="fa fa-check"></i><b>9.2.2</b> Метод Монте-Карло</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#соединение-идей-марковских-цепей-и-монте-карло"><i class="fa fa-check"></i><b>9.3</b> Соединение идей Марковских цепей и Монте-Карло</a></li>
+<li class="chapter" data-level="9.4" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#brms"><i class="fa fa-check"></i><b>9.4</b> <code>brms</code></a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="введение-в-марковские-цепи-монте-карло.html"><a href="введение-в-марковские-цепи-монте-карло.html#регрессионный-пример"><i class="fa fa-check"></i><b>9.4.1</b> Регрессионный пример</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html"><i class="fa fa-check"></i><b>10</b> Ограничения на применение регрессии</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#дисперсия-и-стандартное-отклонение"><i class="fa fa-check"></i><b>10.1</b> Дисперсия и стандартное отклонение</a></li>
+<li class="chapter" data-level="10.2" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#ковариация"><i class="fa fa-check"></i><b>10.2</b> Ковариация</a></li>
+<li class="chapter" data-level="10.3" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#корреляция"><i class="fa fa-check"></i><b>10.3</b> Корреляция</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#корреляция-пирсона"><i class="fa fa-check"></i><b>10.3.1</b> Корреляция Пирсона</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#основы-регрессионного-анализа"><i class="fa fa-check"></i><b>10.4</b> Основы регрессионного анализа</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#первая-регрессия"><i class="fa fa-check"></i><b>10.4.1</b> Первая регрессия</a></li>
+<li class="chapter" data-level="10.4.2" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#категориальные-переменные"><i class="fa fa-check"></i><b>10.4.2</b> Категориальные переменные</a></li>
+<li class="chapter" data-level="10.4.3" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#множественная-регрессия"><i class="fa fa-check"></i><b>10.4.3</b> Множественная регрессия</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#нелинейность-взаимосвязи"><i class="fa fa-check"></i><b>10.5</b> Нелинейность взаимосвязи</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#логарифмирование"><i class="fa fa-check"></i><b>10.5.1</b> Логарифмирование</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#нормальность-распределение-остатков"><i class="fa fa-check"></i><b>10.6</b> Нормальность распределение остатков</a></li>
+<li class="chapter" data-level="10.7" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#гетероскидастичность"><i class="fa fa-check"></i><b>10.7</b> Гетероскидастичность</a></li>
+<li class="chapter" data-level="10.8" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#мультиколлинеарность"><i class="fa fa-check"></i><b>10.8</b> Мультиколлинеарность</a></li>
+<li class="chapter" data-level="10.9" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#независимость-наблюдений"><i class="fa fa-check"></i><b>10.9</b> Независимость наблюдений</a>
+<ul>
+<li class="chapter" data-level="10.9.1" data-path="ограничения-на-применение-регрессии.html"><a href="ограничения-на-применение-регрессии.html#линейная-модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>10.9.1</b> Линейная модель со смешанными эффектами</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html"><i class="fa fa-check"></i><b>11</b> Байесовский регрессионный анализ</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#основы-регрессионного-анализа-1"><i class="fa fa-check"></i><b>11.1</b> Основы регрессионного анализа</a></li>
+<li class="chapter" data-level="11.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#brms-1"><i class="fa fa-check"></i><b>11.2</b> <code>brms</code></a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.1</b> Модель только со свободным членом</a></li>
+<li class="chapter" data-level="11.2.2" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#проверка-сходимости-модели"><i class="fa fa-check"></i><b>11.2.2</b> Проверка сходимости модели</a></li>
+<li class="chapter" data-level="11.2.3" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#опять-модель-только-со-свободным-членом"><i class="fa fa-check"></i><b>11.2.3</b> Опять модель только со свободным членом</a></li>
+<li class="chapter" data-level="11.2.4" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-только-с-угловым-коэффициентом"><i class="fa fa-check"></i><b>11.2.4</b> Модель только с угловым коэффициентом</a></li>
+<li class="chapter" data-level="11.2.5" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-с-угловым-коэффициентом-и-свободным-членом"><i class="fa fa-check"></i><b>11.2.5</b> Модель с угловым коэффициентом и свободным членом</a></li>
+<li class="chapter" data-level="11.2.6" data-path="байесовский-регрессионный-анализ.html"><a href="байесовский-регрессионный-анализ.html#модель-со-смешанными-эффектами"><i class="fa fa-check"></i><b>11.2.6</b> Модель со смешанными эффектами</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html"><i class="fa fa-check"></i><b>12</b> Введение в логистическую регресиию</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#основы-регрессионного-анализа-2"><i class="fa fa-check"></i><b>12.1</b> Основы регрессионного анализа</a></li>
+<li class="chapter" data-level="12.2" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#логистическая-регрессия"><i class="fa fa-check"></i><b>12.2</b> Логистическая регрессия</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#теория"><i class="fa fa-check"></i><b>12.2.1</b> Теория</a></li>
+<li class="chapter" data-level="12.2.2" data-path="введение-в-логистическую-регресиию.html"><a href="введение-в-логистическую-регресиию.html#brms-2"><i class="fa fa-check"></i><b>12.2.2</b> brms</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ссылки-на-литературу.html"><a href="ссылки-на-литературу.html"><i class="fa fa-check"></i>Ссылки на литературу</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Анализ данных для лингвистов</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="введение-в-логистическую-регресиию" class="section level1 hasAnchor" number="12">
+<h1><span class="header-section-number">12</span> Введение в логистическую регресиию<a href="введение-в-логистическую-регресиию.html#введение-в-логистическую-регресиию" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="введение-в-логистическую-регресиию.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="основы-регрессионного-анализа-2" class="section level2 hasAnchor" number="12.1">
+<h2><span class="header-section-number">12.1</span> Основы регрессионного анализа<a href="введение-в-логистическую-регресиию.html#основы-регрессионного-анализа-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><img src="da4l_files/figure-html/unnamed-chunk-230-1.png" width="672" /></p>
+<p>Когда мы используем регрессионный анализ, мы пытаемся оценить два параметра:</p>
+<ul>
+<li>свободный член (intercept) – значение <span class="math inline">\(y\)</span> при <span class="math inline">\(x = 0\)</span>;</li>
+<li>угловой коэффициент (slope) – изменение <span class="math inline">\(y\)</span> при изменении <span class="math inline">\(x\)</span> на одну единицу.</li>
+</ul>
+<p><span class="math display">\[y_i = \hat{\beta_0} + \hat{\beta_1}\times x_i + \epsilon_i\]</span></p>
+<p>Причем, иногда мы можем один или другой параметр считать равным нулю.</p>
+<p>При этом, вне зависимости от статистической школы, у регрессии есть свои ограничения на применение:</p>
+<ul>
+<li>линейность связи между <span class="math inline">\(x\)</span> и <span class="math inline">\(y\)</span>;</li>
+<li>нормальность распределение остатков <span class="math inline">\(\epsilon_i\)</span>;</li>
+<li>гомоскидастичность — равномерность распределения остатков на всем протяжении <span class="math inline">\(x\)</span>;</li>
+<li>независимость переменных;</li>
+<li>независимость наблюдений друг от друга.</li>
+</ul>
+</div>
+<div id="логистическая-регрессия" class="section level2 hasAnchor" number="12.2">
+<h2><span class="header-section-number">12.2</span> Логистическая регрессия<a href="введение-в-логистическую-регресиию.html#логистическая-регрессия" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Логистическая (logit, logistic) и мультиномиальная (multinomial) регрессия применяются в случаях, когда зависимая переменная является категориальной:</p>
+<ul>
+<li>с двумя значениями (логистическая регрессия)</li>
+<li>с более чем двумя значениями, упорядоченными в иерархию (порядковая регрессия)</li>
+<li>с более чем двумя значениями (мультиномиальная регрессия)</li>
+</ul>
+<div id="теория" class="section level3 hasAnchor" number="12.2.1">
+<h3><span class="header-section-number">12.2.1</span> Теория<a href="введение-в-логистическую-регресиию.html#теория" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Мы хотим чего-то такого:
+<span class="math display">\[\underbrace{y}_{[-\infty, +\infty]}=\underbrace{\mbox{β}_0+\mbox{β}_1\cdot x_1+\mbox{β}_2\cdot x_2 + \dots +\mbox{β}_k\cdot x_k +\mbox{ε}_i}_{[-\infty, +\infty]}\]</span>
+Вероятность — отношение количества успехов к общему числу событий:
+<span class="math display">\[p = \frac{\mbox{# успехов}}{\mbox{# неудач} + \mbox{# успехов}}, p \in [0, 1]\]</span>
+Шансы — отношение количества успехов к количеству неудач:
+<span class="math display">\[odds = \frac{p}{1-p} = \frac{p\mbox{(успеха)}}{p\mbox{(неудачи)}}, odds \in [0, +\infty]\]</span>
+Натуральный логарифм шансов:
+<span class="math display">\[\log(odds) \in [-\infty, +\infty]\]</span></p>
+<p>Но, что нам говорит логарифм шансов? Как нам его интерпретировать?</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="введение-в-логистическую-регресиию.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">n =</span> <span class="dv">10</span>,</span>
+<span id="cb275-2"><a href="введение-в-логистическую-регресиию.html#cb275-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">success =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>,</span>
+<span id="cb275-3"><a href="введение-в-логистическую-регресиию.html#cb275-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">failure =</span> n <span class="sc">-</span> success,</span>
+<span id="cb275-4"><a href="введение-в-логистическую-регресиию.html#cb275-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">prob.1 =</span> success<span class="sc">/</span>(success<span class="sc">+</span>failure),</span>
+<span id="cb275-5"><a href="введение-в-логистическую-регресиию.html#cb275-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">odds =</span> success<span class="sc">/</span>failure,</span>
+<span id="cb275-6"><a href="введение-в-логистическую-регресиию.html#cb275-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">log_odds =</span> <span class="fu">log</span>(odds),</span>
+<span id="cb275-7"><a href="введение-в-логистическую-регресиию.html#cb275-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">prob.2 =</span> <span class="fu">exp</span>(log_odds)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(log_odds)))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["n"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["success"],"name":[2],"type":["int"],"align":["right"]},{"label":["failure"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["prob.1"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["odds"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["log_odds"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["prob.2"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"10","2":"1","3":"9","4":"0.1","5":"0.1111111","6":"-2.1972246","7":"0.1"},{"1":"10","2":"2","3":"8","4":"0.2","5":"0.2500000","6":"-1.3862944","7":"0.2"},{"1":"10","2":"3","3":"7","4":"0.3","5":"0.4285714","6":"-0.8472979","7":"0.3"},{"1":"10","2":"4","3":"6","4":"0.4","5":"0.6666667","6":"-0.4054651","7":"0.4"},{"1":"10","2":"5","3":"5","4":"0.5","5":"1.0000000","6":"0.0000000","7":"0.5"},{"1":"10","2":"6","3":"4","4":"0.6","5":"1.5000000","6":"0.4054651","7":"0.6"},{"1":"10","2":"7","3":"3","4":"0.7","5":"2.3333333","6":"0.8472979","7":"0.7"},{"1":"10","2":"8","3":"2","4":"0.8","5":"4.0000000","6":"1.3862944","7":"0.8"},{"1":"10","2":"9","3":"1","4":"0.9","5":"9.0000000","6":"2.1972246","7":"0.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Как связаны вероятность и логарифм шансов:
+<span class="math display">\[\log(odds) = \log\left(\frac{p}{1-p}\right)\]</span>
+<span class="math display">\[p = \frac{\exp(\log(odds))}{1+\exp(\log(odds))}\]</span></p>
+<div class="rmdtask">
+<p>
+Логарифм шансов равен 0.25. Посчитайте вероятность успеха:
+</p>
+</div>
+<form name="form_11609" onsubmit="return validate_form_11609()" method="post">
+<input type="text" name="answer_11609"><br><input type="submit" value="check">
+</form>
+<p id="result_11609">
+</p>
+<script> function validate_form_11609() {var x, text; var x = document.forms["form_11609"]["answer_11609"].value;if (x == "0.562176500885798"){text = 'Correct';} else {text = 'I have a different answer';} document.getElementById('result_11609').innerHTML = text; return false;} </script>
+<p>Как связаны вероятность и логарифм шансов:</p>
+<p><img src="da4l_files/figure-html/unnamed-chunk-234-1.png" width="672" /><img src="da4l_files/figure-html/unnamed-chunk-234-2.png" width="672" /><img src="da4l_files/figure-html/unnamed-chunk-234-3.png" width="672" /><img src="da4l_files/figure-html/unnamed-chunk-234-4.png" width="672" /></p>
+</div>
+<div id="brms-2" class="section level3 hasAnchor" number="12.2.2">
+<h3><span class="header-section-number">12.2.2</span> brms<a href="введение-в-логистическую-регресиию.html#brms-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>В датасет собрано 19 языков, со следующими переменными:</p>
+<ul>
+<li><code>language</code> — переменная, содержащая язык</li>
+<li><code>tone</code> — бинарная переменная, обозначающая наличие тонов</li>
+<li><code>long_vowels</code> — бинарная переменная, обозначающая наличие долгих гласных</li>
+<li><code>stress</code> — бинарная переменная, обозначающая наличие ударения</li>
+<li><code>ejectives</code> — бинарная переменная, обозначающая наличие абруптивных</li>
+<li><code>consonants</code> — переменная, содержащая информацию о количестве согласных</li>
+<li><code>vowels</code> — переменная, содержащая информацию о количестве гласных</li>
+</ul>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="введение-в-логистическую-регресиию.html#cb276-1" aria-hidden="true" tabindex="-1"></a>phonological_profiles <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/agricolamz/2023_da4l/master/data/phonological_profiles.csv&quot;</span>)</span>
+<span id="cb276-2"><a href="введение-в-логистическую-регресиию.html#cb276-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(phonological_profiles)</span></code></pre></div>
+<pre><code>Rows: 19
+Columns: 8
+$ language    &lt;chr&gt; &quot;Turkish&quot;, &quot;Korean&quot;, &quot;Tiwi&quot;, &quot;Liberia Kpelle&quot;, &quot;Tulu&quot;, &quot;Ma…
+$ tone        &lt;lgl&gt; FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE…
+$ long_vowels &lt;lgl&gt; TRUE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, TRUE,…
+$ stress      &lt;lgl&gt; TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, F…
+$ ejectives   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FA…
+$ consonants  &lt;dbl&gt; 25, 21, 22, 22, 24, 20, 22, 24, 15, 18, 17, 8, 26, 28, 30,…
+$ vowels      &lt;dbl&gt; 8, 11, 4, 12, 13, 6, 20, 12, 5, 11, 8, 5, 14, 6, 7, 7, 5, …
+$ area        &lt;chr&gt; &quot;Eurasia&quot;, &quot;Eurasia&quot;, &quot;Australia&quot;, &quot;Africa&quot;, &quot;Eurasia&quot;, &quot;S…</code></pre>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="введение-в-логистическую-регресиию.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb278-2"><a href="введение-в-логистическую-регресиию.html#cb278-2" aria-hidden="true" tabindex="-1"></a>phonological_profiles <span class="sc">%&gt;%</span> </span>
+<span id="cb278-3"><a href="введение-в-логистическую-регресиию.html#cb278-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(ejectives, consonants))<span class="sc">+</span></span>
+<span id="cb278-4"><a href="введение-в-логистическую-регресиию.html#cb278-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">fill =</span> ejectives), <span class="at">show.legend =</span> <span class="cn">FALSE</span>, <span class="at">outlier.alpha =</span> <span class="dv">0</span>)<span class="sc">+</span> </span>
+<span id="cb278-5"><a href="введение-в-логистическую-регресиию.html#cb278-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># по умолчанию боксплот рисует выбросы, outlier.alpha = 0 -- это отключает</span></span>
+<span id="cb278-6"><a href="введение-в-логистическую-регресиию.html#cb278-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">width =</span> <span class="fl">0.2</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-235-1.png" width="672" /></p>
+<div id="модель-без-предиктора" class="section level4 hasAnchor" number="12.2.2.1">
+<h4><span class="header-section-number">12.2.2.1</span> Модель без предиктора<a href="введение-в-логистическую-регресиию.html#модель-без-предиктора" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="введение-в-логистическую-регресиию.html#cb279-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(brms)</span>
+<span id="cb279-2"><a href="введение-в-логистическую-регресиию.html#cb279-2" aria-hidden="true" tabindex="-1"></a>parallel<span class="sc">::</span><span class="fu">detectCores</span>()</span></code></pre></div>
+<pre><code>[1] 16</code></pre>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="введение-в-логистическую-регресиию.html#cb281-1" aria-hidden="true" tabindex="-1"></a>n_cores <span class="ot">&lt;-</span> <span class="dv">15</span> <span class="co"># parallel::detectCores() - 1</span></span>
+<span id="cb281-2"><a href="введение-в-логистическую-регресиию.html#cb281-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-3"><a href="введение-в-логистическую-регресиию.html#cb281-3" aria-hidden="true" tabindex="-1"></a><span class="fu">get_prior</span>(ejectives <span class="sc">~</span> <span class="dv">1</span>, </span>
+<span id="cb281-4"><a href="введение-в-логистическую-регресиию.html#cb281-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> phonological_profiles)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["prior"],"name":[1],"type":["chr"],"align":["left"]},{"label":["class"],"name":[2],"type":["chr"],"align":["left"]},{"label":["coef"],"name":[3],"type":["chr"],"align":["left"]},{"label":["group"],"name":[4],"type":["chr"],"align":["left"]},{"label":["resp"],"name":[5],"type":["chr"],"align":["left"]},{"label":["dpar"],"name":[6],"type":["chr"],"align":["left"]},{"label":["nlpar"],"name":[7],"type":["chr"],"align":["left"]},{"label":["lb"],"name":[8],"type":["chr"],"align":["left"]},{"label":["ub"],"name":[9],"type":["chr"],"align":["left"]},{"label":["source"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"student_t(3, 0, 2.5)","2":"Intercept","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"default"},{"1":"student_t(3, 0, 2.5)","2":"sigma","3":"","4":"","5":"","6":"","7":"","8":"0","9":"","10":"default"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="введение-в-логистическую-регресиию.html#cb282-1" aria-hidden="true" tabindex="-1"></a>logit_0 <span class="ot">&lt;-</span> <span class="fu">brm</span>(ejectives<span class="sc">~</span><span class="dv">1</span>, </span>
+<span id="cb282-2"><a href="введение-в-логистическую-регресиию.html#cb282-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> <span class="fu">bernoulli</span>(), </span>
+<span id="cb282-3"><a href="введение-в-логистическую-регресиию.html#cb282-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> phonological_profiles,</span>
+<span id="cb282-4"><a href="введение-в-логистическую-регресиию.html#cb282-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">cores =</span> n_cores, </span>
+<span id="cb282-5"><a href="введение-в-логистическую-регресиию.html#cb282-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">refresh =</span> <span class="dv">0</span>, </span>
+<span id="cb282-6"><a href="введение-в-логистическую-регресиию.html#cb282-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
+gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -ffile-prefix-map=/build/r-base-LhKvHL/r-base-4.2.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+  628 | namespace Eigen {
+      | ^~~~~~~~~
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+  628 | namespace Eigen {
+      |                 ^
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+   96 | #include &lt;complex&gt;
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="введение-в-логистическую-регресиию.html#cb284-1" aria-hidden="true" tabindex="-1"></a>logit_0</span></code></pre></div>
+<pre><code> Family: bernoulli 
+  Links: mu = logit 
+Formula: ejectives ~ 1 
+   Data: phonological_profiles (Number of observations: 19) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Population-Level Effects: 
+          Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept    -0.77      0.51    -1.80     0.17 1.01     1076     1990
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="введение-в-логистическую-регресиию.html#cb286-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_0)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-237-1.png" width="672" /></p>
+<p>В нашем датасете 13 языков не имеют абруптивных и 6 имеют, так что число, которое мы видим в коэффициенте можно оценить как <span class="math inline">\(log(6/13)=-0.7732\)</span>, что немного отличается от того, что получилось в модели. Мы можем использовать прошлую формулу, чтобы получить вероятность:</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="введение-в-логистическую-регресиию.html#cb287-1" aria-hidden="true" tabindex="-1"></a>coef <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.79</span></span>
+<span id="cb287-2"><a href="введение-в-логистическую-регресиию.html#cb287-2" aria-hidden="true" tabindex="-1"></a><span class="fu">exp</span>(coef)<span class="sc">/</span>(<span class="dv">1</span><span class="sc">+</span><span class="fu">exp</span>(coef))</span></code></pre></div>
+<pre><code>[1] 0.3121687</code></pre>
+</div>
+<div id="модель-c-одним-числовым-предиктором" class="section level4 hasAnchor" number="12.2.2.2">
+<h4><span class="header-section-number">12.2.2.2</span> Модель c одним числовым предиктором<a href="введение-в-логистическую-регресиию.html#модель-c-одним-числовым-предиктором" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="введение-в-логистическую-регресиию.html#cb289-1" aria-hidden="true" tabindex="-1"></a>logit_1 <span class="ot">&lt;-</span> <span class="fu">brm</span>(ejectives<span class="sc">~</span>consonants, </span>
+<span id="cb289-2"><a href="введение-в-логистическую-регресиию.html#cb289-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">family =</span> <span class="fu">bernoulli</span>(), </span>
+<span id="cb289-3"><a href="введение-в-логистическую-регресиию.html#cb289-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">data =</span> phonological_profiles,</span>
+<span id="cb289-4"><a href="введение-в-логистическую-регресиию.html#cb289-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">cores =</span> n_cores, </span>
+<span id="cb289-5"><a href="введение-в-логистическую-регресиию.html#cb289-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">refresh =</span> <span class="dv">0</span>, </span>
+<span id="cb289-6"><a href="введение-в-логистическую-регресиию.html#cb289-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>Running /usr/lib/R/bin/R CMD SHLIB foo.c
+gcc -I&quot;/usr/share/R/include&quot; -DNDEBUG   -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/Rcpp/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/unsupported&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/BH/include&quot; -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/src/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppParallel/include/&quot;  -I&quot;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/rstan/include&quot; -DEIGEN_NO_DEBUG  -DBOOST_DISABLE_ASSERTS  -DBOOST_PENDING_INTEGER_LOG2_HPP  -DSTAN_THREADS  -DBOOST_NO_AUTO_PTR  -include &#39;/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp&#39;  -D_REENTRANT -DRCPP_PARALLEL_USE_TBB=1      -fpic  -g -O2 -ffile-prefix-map=/build/r-base-LhKvHL/r-base-4.2.3=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2  -c foo.c -o foo.o
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:88,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:1: error: unknown type name ‘namespace’
+  628 | namespace Eigen {
+      | ^~~~~~~~~
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/src/Core/util/Macros.h:628:17: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘{’ token
+  628 | namespace Eigen {
+      |                 ^
+In file included from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Dense:1,
+                 from /home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/StanHeaders/include/stan/math/prim/mat/fun/Eigen.hpp:13,
+                 from &lt;command-line&gt;:
+/home/agricolamz/R/x86_64-pc-linux-gnu-library/4.2/RcppEigen/include/Eigen/Core:96:10: fatal error: complex: No such file or directory
+   96 | #include &lt;complex&gt;
+      |          ^~~~~~~~~
+compilation terminated.
+make: *** [/usr/lib/R/etc/Makeconf:169: foo.o] Error 1</code></pre>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="введение-в-логистическую-регресиию.html#cb291-1" aria-hidden="true" tabindex="-1"></a>logit_1</span></code></pre></div>
+<pre><code> Family: bernoulli 
+  Links: mu = logit 
+Formula: ejectives ~ consonants 
+   Data: phonological_profiles (Number of observations: 19) 
+  Draws: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+         total post-warmup draws = 4000
+
+Population-Level Effects: 
+           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+Intercept    -15.67      6.96   -31.56    -5.01 1.00     1971     1770
+consonants     0.60      0.28     0.18     1.24 1.00     2060     1736
+
+Draws were sampled using sampling(NUTS). For each parameter, Bulk_ESS
+and Tail_ESS are effective sample size measures, and Rhat is the potential
+scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="введение-в-логистическую-регресиию.html#cb293-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(logit_1)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-239-1.png" width="672" /></p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="введение-в-логистическую-регресиию.html#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidybayes)</span>
+<span id="cb294-2"><a href="введение-в-логистическую-регресиию.html#cb294-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-3"><a href="введение-в-логистическую-регресиию.html#cb294-3" aria-hidden="true" tabindex="-1"></a>phonological_profiles <span class="sc">%&gt;%</span> </span>
+<span id="cb294-4"><a href="введение-в-логистическую-регресиию.html#cb294-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(logit_1, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb294-5"><a href="введение-в-логистическую-регресиию.html#cb294-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ejectives =</span> <span class="fu">as.double</span>(ejectives)) <span class="sc">%&gt;%</span> </span>
+<span id="cb294-6"><a href="введение-в-логистическую-регресиию.html#cb294-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(consonants, ejectives)) <span class="sc">+</span></span>
+<span id="cb294-7"><a href="введение-в-логистическую-регресиию.html#cb294-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred))<span class="sc">+</span></span>
+<span id="cb294-8"><a href="введение-в-логистическую-регресиию.html#cb294-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-240-1.png" width="672" /></p>
+<p>Картинка кривая, потому что она строится на основе наших немногочисленных данных. Если мы создадим датафрейм с согласными, то график будет более плавный:</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="введение-в-логистическую-регресиию.html#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(<span class="at">consonants =</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">50</span>, <span class="at">by =</span> <span class="fl">0.1</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb295-2"><a href="введение-в-логистическую-регресиию.html#cb295-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_epred_draws</span>(logit_1, <span class="at">ndraws =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb295-3"><a href="введение-в-логистическую-регресиию.html#cb295-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(consonants, ejectives)) <span class="sc">+</span></span>
+<span id="cb295-4"><a href="введение-в-логистическую-регресиию.html#cb295-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_lineribbon</span>(<span class="fu">aes</span>(<span class="at">y =</span> .epred))</span></code></pre></div>
+<p><img src="da4l_files/figure-html/unnamed-chunk-241-1.png" width="672" /></p>
+<p>Какова вероятность, что в языке с 29 согласными есть абруптивные?</p>
+<p><span class="math display">\[\log\left({\frac{p}{1-p}}\right)_i=\beta_0+\beta_1\times consinants_i + \epsilon_i\]</span>
+<span class="math display">\[\log\left({\frac{p}{1-p}}\right)=-15.74 + 0.60 \times 29 = 1.66\]</span>
+<span class="math display">\[p = \frac{e^{1.66}}{1+e^{1.66}} = 0.840238\]</span>
+Однако в отличие от фриквентистских моделей, <code>predict()</code> на байесовских моделях делает сэмпл из распределений:</p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="введение-в-логистическую-регресиию.html#cb296-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(logit_1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">consonants =</span> <span class="dv">29</span>))</span></code></pre></div>
+<pre><code>     Estimate Est.Error Q2.5 Q97.5
+[1,]  0.76725 0.4226371    0     1</code></pre>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="введение-в-логистическую-регресиию.html#cb298-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(logit_1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">consonants =</span> <span class="dv">29</span>))</span></code></pre></div>
+<pre><code>     Estimate Est.Error Q2.5 Q97.5
+[1,]    0.795 0.4037521    0     1</code></pre>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="введение-в-логистическую-регресиию.html#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(logit_1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">consonants =</span> <span class="dv">29</span>))</span></code></pre></div>
+<pre><code>     Estimate Est.Error Q2.5 Q97.5
+[1,]   0.7805 0.4139596    0     1</code></pre>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="введение-в-логистическую-регресиию.html#cb302-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(logit_1, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">consonants =</span> <span class="dv">29</span>))</span></code></pre></div>
+<pre><code>     Estimate Est.Error Q2.5 Q97.5
+[1,]   0.7915 0.4062869    0     1</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="байесовский-регрессионный-анализ.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ссылки-на-литературу.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/agricolamz/2022_da4l/edit/master/11-inroduction_to_logistic.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["da4l.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"self_contained": true
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
