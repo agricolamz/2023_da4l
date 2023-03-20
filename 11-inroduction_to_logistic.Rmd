@@ -87,13 +87,13 @@ $$\log(odds) = \log\left(\frac{p}{1-p}\right)$$
 $$p = \frac{\exp(\log(odds))}{1+\exp(\log(odds))}$$
 
 ```{block, type = "rmdtask"}
-Логарифм шансов равен 0.25. Посчитайте вероятность успеха:
+Логарифм шансов равен 0.25. Посчитайте вероятность успеха (округлите до 3 знаков после запятой):
 ```
 
 ```{r, results='asis', echo = FALSE}
 library(checkdown)
 log_odds <- 5/20
-check_question(answer = exp(log_odds)/(1+exp(log_odds)))
+check_question(answer = round(exp(log_odds)/(1+exp(log_odds)), 3))
 ```
 
 Как связаны вероятность и логарифм шансов:
@@ -156,6 +156,7 @@ parallel::detectCores()
 n_cores <- 15 # parallel::detectCores() - 1
 
 get_prior(ejectives ~ 1, 
+          family = bernoulli(), 
           data = phonological_profiles)
 ```
 
@@ -215,6 +216,15 @@ tibble(consonants = seq(10, 50, by = 0.1)) %>%
   ggplot(aes(consonants, ejectives)) +
   stat_lineribbon(aes(y = .epred))
 ```
+
+Имеет смысл смотреть предсказание модели без привязки к данным, используя функцию `conditional_effects()`:
+
+```{r}
+conditional_effects(logit_1,
+                    prob = 0.8,
+                    effects = c("consonants"))
+```
+
 
 Какова вероятность, что в языке с 29 согласными есть абруптивные?
 
